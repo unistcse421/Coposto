@@ -1,0 +1,20 @@
+.business-header {
+	background:url("../img/bg.jpg") no-repeat;
+	background-size: 100%;
+	min-height: 400px;
+	opacity: 0.6;
+	width: 100%;
+	text-align:center;
+}
+
+.tagline {
+	color: white;
+	font-size: 3.4vw;
+    font-weight: bold;
+}
+
+.business-header .row {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
