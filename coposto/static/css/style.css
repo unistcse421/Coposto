@@ -23,6 +23,11 @@
     opacity: 0.4;
 }
 
+.search input {
+	border-radius: 0px;
+	height: 38px;
+}
+
 #timer {
 	top: 50%;
     left: 50%;
