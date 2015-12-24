@@ -176,7 +176,7 @@ hr.small {
     vertical-align: bottom;
 }
 
-.header form .col-md-3, .header form .col-md-2 {
+.header form .col-md-3, .header form .col-md-2, .header form .col-md-4 {
     padding-left: 0px;
     padding-right: 0px;
 }

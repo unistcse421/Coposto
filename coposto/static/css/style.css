@@ -1,20 +1,33 @@
-.business-header {
-	background:url("../img/bg.jpg") no-repeat;
-	background-size: 100%;
-	min-height: 400px;
-	opacity: 0.6;
-	width: 100%;
-	text-align:center;
+.search .twitter-typeahead {
+	position: inherit !important;
+}
+.search .tt-menu {
+	background: rgb(255, 255, 255);
+    border: 1px solid rgba(197, 197, 197, 0.67);
+    width: 400%;
+    margin-top: -15px;
+    border-top: 0;
 }
 
-.tagline {
-	color: white;
-	font-size: 3.4vw;
-    font-weight: bold;
+.search .tt-suggestion {
+    border-bottom: 1px solid #EAEAEA;
+    line-height: 180%;
+    padding-left: 9px;
 }
 
-.business-header .row {
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
+.search .tt-suggestion:hover, .search .tt-suggestion:focus {
+	background: rgb(255, 90, 95);
+}
+
+.overlay {
+    opacity: 0.4;
+}
+
+#timer {
+	top: 50%;
+    left: 50%;
+    /*width: 700px;*/
+    height: 100px;
+    margin-top: 80px;
+    margin-left: -460px;
 }

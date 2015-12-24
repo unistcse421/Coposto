@@ -122,12 +122,12 @@
     </header>
 
     
-    <!-- About -->
+    <!-- Sending form -->
     <section id="about" class="about">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2>Stylish Portfolio is the perfect theme for your next project!</h2>
+                    <h2>Send!</h2>
                     <p class="lead">This theme features some wonderful photography courtesy of <a target="_blank" href="http://join.deathtothestockphoto.com/">Death to the Stock Photo</a>.</p>
                 </div>
             </div>
@@ -235,18 +235,33 @@
       }).data('datepicker');
     });
 
-    var countries = new Bloodhound({
-	  datumTokenizer: Bloodhound.tokenizers.whitespace,
-	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-	  prefetch: '../static/data/countries.json'
-	});
 
-	// passing in `null` for the `options` arguments will result in the default
-	// options being used
+    // Instantiate the Bloodhound suggestion engine    
+    var cities = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        // prefetch: '../data/films/post_1960.json',
+        remote: {
+            url: '/city/?q=%QUERY',
+            filter: function(x) {
+                return $.map(x, function(item) {
+                    return {value: item};
+                });
+            },
+            wildcard: '%QUERY'
+        }
+    });
+
+    // Initialize the Bloodhound suggestion engine
+    cities.initialize();
+
 	$('#prefetch .typeahead').typeahead(null, {
-	  name: 'countries',
-	  source: countries
-	});
+        name: 'cities',
+        display: 'value',
+        source: cities.ttAdapter(),
+        minLength: 3, // send AJAX request only after user type in at least 3 characters
+        limit: 5 // limit to show only 10 results
+    });
 
     </script>
 
