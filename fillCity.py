@@ -6,6 +6,9 @@ from head.models import City
 
 # City.objects.filter(id__in=[257518, 352150]).delete()
 
+# print list(City.objects.all().filter(country='Kor').values_list('country'))
+korList = City.objects.filter(country='Kor').update(country=u'Korea');
+print list(City.objects.all().filter(country='Korea').values_list('country'))
 
 # maxInt = sys.maxsize
 # decrement = True

@@ -1,0 +1,40 @@
+<h2 class="text-left">Fill the form:</h2>
+<form action='fff' id="send_form" method='post'>{% csrf_token %}
+{{ form.non_field_errors }}
+<div class="fieldWrapper dest_a">
+    {{ form.destination_a.errors }}
+    {{ form.destination_a }}
+</div>
+<div class="fieldWrapper dest_b">
+    {{ form.destination_b.errors }}
+    {{ form.destination_b }}
+</div>
+<div class="fieldWrapper col-md-6 date_a">
+    {{ form.date_a.errors }}
+    {{ form.date_a }}
+</div>
+<div class="fieldWrapper col-md-6 date_b">
+    {{ form.date_b.errors }}
+    {{ form.date_b }}
+</div>
+<div class="fieldWrapper">
+    {{ form.name.errors }}
+    {{ form.name }}
+</div>
+<div class="fieldWrapper">
+    {{ form.description.errors }}
+    {{ form.description }}
+</div>
+<div class="fieldWrapper">
+    {{ form.weight.errors }}
+    {{ form.weight }}
+</div>
+<div class="fieldWrapper">
+    {{ form.price.errors }}
+    {{ form.price }}
+</div>
+<div class="fieldWrapper">
+    {{ form.image.errors }}
+    {{ form.image }}
+</div>
+</form>

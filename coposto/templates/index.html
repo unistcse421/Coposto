@@ -63,48 +63,40 @@
     <!-- Header -->
     <header id="top" class="header">
         <div class="text-vertical-center">
-            <h1>COPOSTO</h1>
+            <!-- <h1>COPOSTO</h1> -->
+            <div>
+                <img class="img-responsive" src="static/img/logo.png"/>
+            </div>
             <h3>From people to people</h3>
             <br>
-            <a href="#about" class="btn btn-primary btn-lg">Send</a>
+            <a href="#send_form" id="send_form_button" class="btn btn-primary btn-lg">Send</a>
         </div>
-        <div class="search">
+        <div class="search" id="send_form">
 	        <div class="container">
 	          	<div class="row">
 	            	<div class="col-md-10 col-md-offset-1">
 	              		<div class="form-section">
 	                		<div class="row">
 	                    		<form role="form">
-	                      			<div class="col-md-2 col-md-offset-1">
-	                        			<div class="form-group" id="prefetch">
-	                          				<label class="sr-only" for="location">Location</label>
+	                      			<div class="col-md-3 col-md-offset-1">
+	                        			<div class="form-group from" id="prefetch">
+	                          				<!-- <label class="sr-only" for="location">Location</label> -->
 	                          				<input type="email" class="form-control typeahead" id="location" placeholder="From">
 	                       				</div>
 	                      			</div>
-	                      			<div class="col-md-2">
-	                        			<div class="form-group">
-	                          				<label class="sr-only" for="location">Location</label>
-	                          				<input type="email" class="form-control" id="location" placeholder="To">
+	                      			<div class="col-md-3">
+	                        			<div class="form-group to" id="prefetch">
+	                          				<!-- <label class="sr-only" for="location">Location</label> -->
+	                          				<input type="email" class="form-control typeahead" id="location" placeholder="To">
 	                       				</div>
 	                      			</div>
 	                      			<div class="col-md-2">
 	                        			<div class="form-group">
-	                          				<label class="sr-only" for="checkin">From</label>
+	                          				<!-- <label class="sr-only" for="checkin">From</label> -->
 	                          				<div class="input-group">
-	                            				<input type="text" class="form-control" id="checkin" placeholder="From">
+	                            				<input type="text" class="form-control" id="date" placeholder="Date">
 	                            				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 	                          				</div>
-	                        			</div>
-	                      			</div>
-	                      			<div class="col-md-2">
-	                        			<div class="form-group">
-	                          				<label class="sr-only" for="checkout">To</label>
-	                      					<div class="input-group">
-	                        					<input type="text" class="form-control" id="checkout" placeholder="To">
-	                        					<span class="input-group-addon">
-	                        						<i class="glyphicon glyphicon-calendar"></i>
-	                        					</span>
-	                      					</div>
 	                        			</div>
 	                      			</div>
 	                      			<div class="col-md-2 img-rounded">
@@ -121,53 +113,69 @@
 		</div>
     </header>
 
-    
-    <!-- Sending form -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2>Send!</h2>
-                    <p class="lead">This theme features some wonderful photography courtesy of <a target="_blank" href="http://join.deathtothestockphoto.com/">Death to the Stock Photo</a>.</p>
-                </div>
-            </div>
-            <!-- /.row -->
-        </div>
-        <!-- /.container -->
-    </section>
-    
+    <div class='bottom_area'>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-10 col-lg-offset-1 text-center">
-                    <h4><strong>Start Bootstrap</strong>
-                    </h4>
-                    <p>3481 Melrose Place<br>Beverly Hills, CA 90210</p>
-                    <ul class="list-unstyled">
-                        <li><i class="fa fa-phone fa-fw"></i> (123) 456-7890</li>
-                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:name@example.com">name@example.com</a>
-                        </li>
-                    </ul>
-                    <br>
-                    <ul class="list-inline">
-                        <li>
-                            <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-dribbble fa-fw fa-3x"></i></a>
-                        </li>
-                    </ul>
-                    <hr class="small">
-                    <p class="text-muted">Copyright &copy; Your Website 2014</p>
+    
+        <!-- Sending form -->
+        <section id="about" class="about">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class = "sliding_section row">
+                            <div class="col-md-8 col-md-offset-1 send_area_div">
+                                <p class="send_form_area">
+                                    
+                                </p>
+                            </div>
+                            <div class = "col-md-8 col-md-offset-1 image">
+                                <span id='button'>Parcel picture</span>
+                                <span id='val'></span>
+                            </div>
+                            <div class='col-md-2 button'>
+                                <input type='submit' class='btn btn-primary btn-lg' value='Submit' />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container -->
+        </section>
+        
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 col-lg-offset-1 text-center">
+                        <h4><strong>COPOSTO</strong>
+                        </h4>
+                        <p>50 UNIST-gil<br>Ulsan, South Korea</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-phone fa-fw"></i> (82) 10 3555-4651</li>
+                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:admin@tentech.io">admin@tentech.io</a>
+                            </li>
+                        </ul>
+                        <br>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-dribbble fa-fw fa-3x"></i></a>
+                            </li>
+                        </ul>
+                        <hr class="small">
+                        <p class="text-muted">Copyright &copy; Tentech 2015</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+
+    </div>
 
     <!-- jQuery -->
     <script src="static/js/jquery.js"></script>
@@ -177,10 +185,16 @@
 
 	<!-- DatePicker -->
     <script src="static/js/bootstrap-datepicker.js"></script>    
+    
+    <!-- Typeahead -->
     <script src="static/js/typeahead.bundle.js"></script>
+
+    <!-- Image upload [dropzone] -->
+    <script src="static/js/dropzone.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script>
+$(document).ready(function(){
     // Closes the sidebar menu
     $("#menu-close").click(function(e) {
         e.preventDefault();
@@ -210,31 +224,16 @@
         });
     });
 
-    $(window).ready(function(){
-      var nowTemp = new Date();
-      var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-      var checkin = $('#checkin').datepicker({
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        var checkin = $('#date').datepicker({
         onRender: function(date) {
-          return date.valueOf() < now.valueOf() ? 'disabled' : '';
+            return date.valueOf() < now.valueOf() ? 'disabled' : '';
         }
       }).on('changeDate', function(ev) {
-        if (ev.date.valueOf() > checkout.date.valueOf()) {
-          var newDate = new Date(ev.date)
-          newDate.setDate(newDate.getDate() + 1);
-          checkout.setValue(newDate);
-        }
         checkin.hide();
-        $('#checkout')[0].focus();
       }).data('datepicker');
-      var checkout = $('#checkout').datepicker({
-        onRender: function(date) {
-          return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
-        }
-      }).on('changeDate', function(ev) {
-        checkout.hide();
-      }).data('datepicker');
-    });
-
+    
 
     // Instantiate the Bloodhound suggestion engine    
     var cities = new Bloodhound({
@@ -263,6 +262,104 @@
         limit: 5 // limit to show only 10 results
     });
 
+    $.ajax({
+        type: "POST",
+        url: "/send_form_view", 
+        data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        success : function(data) {
+            $('.send_form_area').html(data);
+            // $('.send_form_area').hide();
+            $('#send_form').submit(function(event) {
+                event.preventDefault();
+                console.log('submitted');
+            });
+            var divOut = $('<div />').addClass('col-md-12');
+            var divOut2 = $('<div />').addClass('col-md-2');
+            var div = $('<div />').addClass('input-group');
+            div = div.wrap(divOut).parent();
+            var span = $('<span />').addClass('input-group-addon date_a');
+            span.attr('id', 'checkin');
+            // span = span.wrap(divOut2).parent();
+            var i = $('<i />').addClass('glyphicon glyphicon-calendar');
+            span.append(i);
+            var span2 = $('<span />').addClass('input-group-addon');
+            span2.attr('id', 'checkin');
+            var i2 = $('<i />').addClass('glyphicon glyphicon-calendar');
+            // span2 = span2.wrap(divOut2).parent();
+            span2.append(i2);
+            var date_a = $('input[name="date_a"]');
+            var date_b = $('input[name="date_b"]');
+            // date_a.after(span);
+            // date_b.after(span2);
+            date_a.wrap(div);
+            date_b.wrap(div);
+            date_a.attr('id', 'checkin');
+            date_b.attr('id', 'checkout');
+
+            var destination_a = $('input[name="destination_a"]');
+            var destination_b = $('input[name="destination_b"]');
+            divOut = $('<div />').attr('id', 'prefetch2');
+            divOut.addClass('col-md-6');
+            destination_a.addClass('typeahead');
+            destination_b.addClass('typeahead');
+            destination_a = destination_a.wrap(divOut).parent();
+            destination_b = destination_b.wrap(divOut).parent();
+
+            $('#prefetch2 .typeahead').typeahead(null, {
+                name: 'cities',
+                display: 'value',
+                source: cities.ttAdapter(),
+                minLength: 3, // send AJAX request only after user type in at least 3 characters
+                limit: 5 // limit to show only 10 results
+            });
+
+            $('.image').click(function () {
+                $("input[type='file']").trigger('click');
+            })
+
+            $("input[type='file']").change(function () {
+                $('#val').text(this.value.replace(/C:\\fakepath\\/i, ''));
+                $('#button').text($('#button').html() + ":");
+            })
+        
+
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            var checkin = $('#checkin').datepicker({
+            onRender: function(date) {
+                return date.valueOf() < now.valueOf() ? 'disabled' : '';
+            }
+          }).on('changeDate', function(ev) {
+            
+            if (ev.date.valueOf() > checkout.date.valueOf()) {
+              var newDate = new Date(ev.date)
+              newDate.setDate(newDate.getDate() + 1);
+              checkout.setValue(newDate);
+            }
+            checkin.hide();
+            $('#checkout')[0].focus();
+          }).data('datepicker');
+          var checkout = $('#checkout').datepicker({
+            onRender: function(date) {
+              return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+            }
+          }).on('changeDate', function(ev) {
+            checkout.hide();
+          }).data('datepicker');
+        }
+    });
+
+    $('#send_form_button').click(function() {
+        var clicks = $(this).data('clicks');
+        if (clicks) {
+            $('.sliding_section').slideUp();
+        } else {
+            $('.sliding_section').slideDown();
+        }
+        $(this).data("clicks", !clicks);
+    });
+    
+});
     </script>
 
 </body>

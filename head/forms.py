@@ -7,10 +7,12 @@ PARCEL_TYPES = [('type1', '< 1kg'),
 				('type5', '> 10kg')]
 
 class Parcel(forms.Form):
-    destination_a = forms.CharField(label='From', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'From'}))
-    destination_b = forms.CharField(label='To', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'To'}))
-    name = forms.CharField(label='Name', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'Parcel name'}))
-    description = forms.Textarea(attrs={'placeholder': 'Description'}))
-	weight = forms.FloatField(required=True, label= "Parcel weight", widget=forms.TextInput(attrs={'placeholder': 'Parcel weight in kg'}))
-	price = forms.FloatField(required=True, label= "Suggested price", widget=forms.TextInput(attrs={'placeholder': 'How much would like to pay?'}))
+	destination_a = forms.CharField(label='', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'From', 'class': 'form-control'}))
+	destination_b = forms.CharField(label='', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'To', 'class': 'form-control'}))
+	date_a = forms.CharField(label='', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'From', 'class': 'form-control'}))
+	date_b = forms.CharField(label='', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'To', 'class': 'form-control'}))
+	name = forms.CharField(label='', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'Parcel name', 'class': 'form-control'}))
+	description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Description', 'class': 'form-control'}))
+	weight = forms.FloatField(required=True, label= "", widget=forms.TextInput(attrs={'placeholder': 'Parcel weight in kg', 'class': 'form-control'}))
+	price = forms.FloatField(required=True, label= "", widget=forms.TextInput(attrs={'placeholder': 'How much would like to pay?', 'class': 'form-control'}))
 	image = forms.ImageField()
