@@ -23,6 +23,14 @@
     <link href="static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
+    <!-- jQuery -->
+    <script src="static/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/js/bootstrap.min.js"></script>
+
+    <!-- Validator script -->
+    <script src="static/js/validator.js" type="text/javascript"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -33,35 +41,22 @@
 </head>
 
 <body>
-
-    <!-- Navigation -->
-    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-            <li class="sidebar-brand">
-                <a href="#top"  onclick = $("#menu-close").click(); >Start Bootstrap</a>
-            </li>
-            <li>
-                <a href="#top" onclick = $("#menu-close").click(); >Home</a>
-            </li>
-            <li>
-                <a href="#about" onclick = $("#menu-close").click(); >About</a>
-            </li>
-            <li>
-                <a href="#services" onclick = $("#menu-close").click(); >Services</a>
-            </li>
-            <li>
-                <a href="#portfolio" onclick = $("#menu-close").click(); >Portfolio</a>
-            </li>
-            <li>
-                <a href="#contact" onclick = $("#menu-close").click(); >Contact</a>
-            </li>
-        </ul>
-    </nav>
-
     <!-- Header -->
     <header id="top" class="header">
+        <!-- Navigation -->
+        <nav>
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="#" data-toggle="modal" id="help_button" data-target="#mainModal" data-whatever="help">Help</a>
+                </li>
+                <li>
+                    <a href="#" data-toggle="modal" id="signup_button" data-target="#mainModal" data-whatever="signup">Sign Up</a>
+                </li>
+                <li>
+                    <a href="#" data-toggle="modal" id="signin_button" data-target="#mainModal" data-whatever="signin">Sign In</a>
+                </li>
+            </ul>
+        </nav>
         <div class="text-vertical-center">
             <!-- <h1>COPOSTO</h1> -->
             <div>
@@ -81,21 +76,24 @@
 	                      			<div class="col-md-3 col-md-offset-1">
 	                        			<div class="form-group from" id="prefetch">
 	                          				<!-- <label class="sr-only" for="location">Location</label> -->
-	                          				<input type="email" class="form-control typeahead" id="location" placeholder="From">
+	                          				<input required type="text" class="form-control typeahead" id="location" placeholder="From">
+                                            <div class="help-block with-errors"></div>
 	                       				</div>
 	                      			</div>
 	                      			<div class="col-md-3">
 	                        			<div class="form-group to" id="prefetch">
 	                          				<!-- <label class="sr-only" for="location">Location</label> -->
-	                          				<input type="email" class="form-control typeahead" id="location" placeholder="To">
+	                          				<input required type="text" class="form-control typeahead" id="location" placeholder="To">
+                                            <div class="help-block with-errors"></div>
 	                       				</div>
 	                      			</div>
 	                      			<div class="col-md-2">
 	                        			<div class="form-group">
 	                          				<!-- <label class="sr-only" for="checkin">From</label> -->
 	                          				<div class="input-group">
-	                            				<input type="text" class="form-control" id="date" placeholder="Date">
+	                            				<input required type="text" class="form-control" id="date" placeholder="Date">
 	                            				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                                <div class="help-block with-errors"></div>
 	                          				</div>
 	                        			</div>
 	                      			</div>
@@ -113,27 +111,23 @@
 		</div>
     </header>
 
-    <div class='bottom_area'>
+    <!-- Modals -->
+    <div class="modal fade" id="mainModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                
+            </div>
+        </div>
+    </div>
 
-    
+    <div class='bottom_area'>
         <!-- Sending form -->
         <section id="about" class="about">
             <div class="container">
                 <div class="row text-center">
                     <div class="col-md-10 col-md-offset-1">
                         <div class = "sliding_section row">
-                            <div class="col-md-8 col-md-offset-1 send_area_div">
-                                <p class="send_form_area">
-                                    
-                                </p>
-                            </div>
-                            <div class = "col-md-8 col-md-offset-1 image">
-                                <span id='button'>Parcel picture</span>
-                                <span id='val'></span>
-                            </div>
-                            <div class='col-md-2 button'>
-                                <input type='submit' class='btn btn-primary btn-lg' value='Submit' />
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -177,12 +171,6 @@
 
     </div>
 
-    <!-- jQuery -->
-    <script src="static/js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="static/js/bootstrap.min.js"></script>
-
 	<!-- DatePicker -->
     <script src="static/js/bootstrap-datepicker.js"></script>    
     
@@ -194,18 +182,7 @@
 
     <!-- Custom Theme JavaScript -->
     <script>
-$(document).ready(function(){
-    // Closes the sidebar menu
-    $("#menu-close").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
-
-    // Opens the sidebar menu
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
+    $(document).ready(function() {
 
     // Scrolls to the selected menu item on the page
     $(function() {
@@ -224,15 +201,57 @@ $(document).ready(function(){
         });
     });
 
-        var nowTemp = new Date();
-        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-        var checkin = $('#date').datepicker({
-        onRender: function(date) {
-            return date.valueOf() < now.valueOf() ? 'disabled' : '';
+    // Help / SignUp / SignIn forms
+
+    $('#mainModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var section = button.data('whatever') // Extract info from data-* attributes
+
+
+        var modal = $(this);
+        $.ajax({
+            type: "GET",
+            url: "/accounts/register/", 
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            success : function(data) {
+                // console.log(data);
+                $('.modal-content').html(data);
+            }
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            // var modal = $(this)
+            // modal.find('.modal-title').text('New message to ' + recipient)
+            // modal.find('.modal-body input').val(recipient)
+        });
+    });
+
+    $(document).one('click', '#registration_form', function(e) {
+        $('#registration_form').validator();
+        console.log('validator activated');
+    });
+
+    $(document).on('submit', '#registration_form', function(e) {
+        if (e.isDefaultPrevented()) {
+            console.log('form has problems');
+        } else {
+            if ($('#registration_form').attr('novalidate') == 'true') {
+                console.log('form is fully valid');
+                return false;
+            }
         }
-      }).on('changeDate', function(ev) {
+
+    });
+
+    // Bring form date picker
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+    var checkin = $('#date').datepicker({
+    onRender: function(date) {
+        return date.valueOf() < now.valueOf() ? 'disabled' : '';
+    }
+    }).on('changeDate', function(ev) {
         checkin.hide();
-      }).data('datepicker');
+    }).data('datepicker');
     
 
     // Instantiate the Bloodhound suggestion engine    
@@ -254,7 +273,11 @@ $(document).ready(function(){
     // Initialize the Bloodhound suggestion engine
     cities.initialize();
 
-	$('#prefetch .typeahead').typeahead(null, {
+	$('#prefetch .typeahead').typeahead(
+        {
+          minLength: 3,
+          highlight: true
+        },{
         name: 'cities',
         display: 'value',
         source: cities.ttAdapter(),
@@ -262,17 +285,86 @@ $(document).ready(function(){
         limit: 5 // limit to show only 10 results
     });
 
+    function errorize_send_form(error_txt) {
+        $('#send_button').addClass('disabled');
+        $('.image').addClass('error_div');
+        $('.image .help-block').addClass('with-errors');
+        $('.image .help-block').html(error_txt);
+        console.log($('.image .help-block').html());
+    }
+
+    function anti_errorize_send_form() {
+        $('#send_button').removeClass('disabled');
+        $('.image').removeClass('error_div');
+        $('.image .help-block').removeClass('with-errors');
+        $('.image .help-block').text('');
+        console.log('anti_errorize_send_form');
+    }
+
+    function picture_validation_send_form(obj) {
+        var fileName = obj.val();
+        if (!fileName) {
+            errorize_send_form('Please attach a picture');
+            if ($('#button').html().slice(-1) == ':')
+                $('#button').text($('#button').html().slice(0, -1));
+        }
+        else {
+            var ext = fileName.split('.').pop().toLowerCase();
+            // var fileSize = (obj.files.length && obj.files[0].size) || '';
+            // console.log($("#send_form input[type='file']")[0].files[0].size);
+            if ($('#button').html().slice(-1) != ':')
+                $('#button').text($('#button').html() + ":");
+            if ($.inArray(ext, ['gif','png','jpg','jpeg']) == -1) {
+                errorize_send_form('Please attach only gif/png/jpg/jpeg');
+            }
+            else if (obj[0].files[0].size > 3*1024*1024) {
+                errorize_send_form('Picture size must be less than 3 MB');
+            }
+            else {
+                anti_errorize_send_form();
+                console.log('Picture is valid');
+                return true;    
+            }
+        }
+        return false;
+    }
+
+    // $(document).on('input', '#checkin', function() {
+    //     console.log($('#checkin').val());
+    // });
+
+    $(document).on("submit", '#send_form', function(event) {
+        var isPictureOk = picture_validation_send_form($("#send_form input[type='file']"))
+        if (event.isDefaultPrevented(event)) {
+            console.log('Form has problems');
+        } else {
+            if (isPictureOk)
+                console.log('Form is fully valid');
+            return false;
+        }
+    });
+
+    $(document).on('click','.image', function () {
+        $("input[type='file']").trigger('click');
+    });
+
+    $(document).on('change', "#send_form input[type='file']", function () {
+        $('#val').text(this.value.replace(/C:\\fakepath\\/i, ''));
+        var obj = $("#send_form input[type='file']");
+        picture_validation_send_form(obj);
+    })
+
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: "/send_form_view", 
         data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
         success : function(data) {
-            $('.send_form_area').html(data);
-            // $('.send_form_area').hide();
-            $('#send_form').submit(function(event) {
-                event.preventDefault();
-                console.log('submitted');
+            $('.sliding_section').html(data);
+
+            $("#checkin").on('input', function (e) {
+                console.log($(this).val());
             });
+
             var divOut = $('<div />').addClass('col-md-12');
             var divOut2 = $('<div />').addClass('col-md-2');
             var div = $('<div />').addClass('input-group');
@@ -296,6 +388,19 @@ $(document).ready(function(){
             date_a.attr('id', 'checkin');
             date_b.attr('id', 'checkout');
 
+            $('input[name="weight"]').attr('type', 'number');
+            $('input[name="price"]').attr('type', 'number');
+            
+            $('form#send_form :input').each(function(e) {
+                $(this).attr('data-delay', '2000');
+            // $(this).blur(function()
+            //     {
+            //         if( $(this).val().length === 0 ) {
+            //             $(this).parents('p').addClass('warning');
+            //         }
+            //     });
+            });
+
             var destination_a = $('input[name="destination_a"]');
             var destination_b = $('input[name="destination_b"]');
             divOut = $('<div />').attr('id', 'prefetch2');
@@ -305,23 +410,17 @@ $(document).ready(function(){
             destination_a = destination_a.wrap(divOut).parent();
             destination_b = destination_b.wrap(divOut).parent();
 
-            $('#prefetch2 .typeahead').typeahead(null, {
+            $('#prefetch2 .typeahead').typeahead(
+                {
+                  minLength: 3,
+                  highlight: true
+                },{
                 name: 'cities',
                 display: 'value',
                 source: cities.ttAdapter(),
                 minLength: 3, // send AJAX request only after user type in at least 3 characters
                 limit: 5 // limit to show only 10 results
             });
-
-            $('.image').click(function () {
-                $("input[type='file']").trigger('click');
-            })
-
-            $("input[type='file']").change(function () {
-                $('#val').text(this.value.replace(/C:\\fakepath\\/i, ''));
-                $('#button').text($('#button').html() + ":");
-            })
-        
 
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -330,12 +429,14 @@ $(document).ready(function(){
                 return date.valueOf() < now.valueOf() ? 'disabled' : '';
             }
           }).on('changeDate', function(ev) {
-            
             if (ev.date.valueOf() > checkout.date.valueOf()) {
               var newDate = new Date(ev.date)
               newDate.setDate(newDate.getDate() + 1);
               checkout.setValue(newDate);
             }
+            // $('.date_a').removeClass('has-error');
+            // $('input[name="date_a"]').attr('required', 'false');
+            // console.log('checkin changed');
             checkin.hide();
             $('#checkout')[0].focus();
           }).data('datepicker');
@@ -344,9 +445,13 @@ $(document).ready(function(){
               return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
             }
           }).on('changeDate', function(ev) {
+            // console.log('checkout changed');
+            // $('.date_b').removeClass('has-error');
+            // $('input[name="date_b"]').attr('required', 'false');
             checkout.hide();
           }).data('datepicker');
         }
+
     });
 
     $('#send_form_button').click(function() {
@@ -355,6 +460,10 @@ $(document).ready(function(){
             $('.sliding_section').slideUp();
         } else {
             $('.sliding_section').slideDown();
+            $('#send_form').submit(function(e) {
+                // e.preventDefault();
+                console.log('submitted');
+            });
         }
         $(this).data("clicks", !clicks);
     });

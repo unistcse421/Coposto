@@ -1,40 +1,59 @@
-<h2 class="text-left">Fill the form:</h2>
-<form action='fff' id="send_form" method='post'>{% csrf_token %}
-{{ form.non_field_errors }}
-<div class="fieldWrapper dest_a">
-    {{ form.destination_a.errors }}
-    {{ form.destination_a }}
-</div>
-<div class="fieldWrapper dest_b">
-    {{ form.destination_b.errors }}
-    {{ form.destination_b }}
-</div>
-<div class="fieldWrapper col-md-6 date_a">
-    {{ form.date_a.errors }}
-    {{ form.date_a }}
-</div>
-<div class="fieldWrapper col-md-6 date_b">
-    {{ form.date_b.errors }}
-    {{ form.date_b }}
-</div>
-<div class="fieldWrapper">
-    {{ form.name.errors }}
-    {{ form.name }}
-</div>
-<div class="fieldWrapper">
-    {{ form.description.errors }}
-    {{ form.description }}
-</div>
-<div class="fieldWrapper">
-    {{ form.weight.errors }}
-    {{ form.weight }}
-</div>
-<div class="fieldWrapper">
-    {{ form.price.errors }}
-    {{ form.price }}
-</div>
-<div class="fieldWrapper">
-    {{ form.image.errors }}
-    {{ form.image }}
-</div>
+<form action='#' id="send_form" method='post'>{% csrf_token %}
+	<div class="col-md-8 col-md-offset-1 send_area_div">
+		<h2 class="text-left">Fill the form:</h2>
+		{{ form.non_field_errors }}
+		<div class="form-group control-group {%if field.errors %}has-error{%endif%} dest_a">
+			<!-- {{ form.destination_a.errors }} -->
+		    {{ form.destination_a }}
+		    <!-- <div class="help-block with-errors"></div> -->
+		</div>
+		<div class="form-group control-group {%if field.errors %}has-error{%endif%} dest_b">
+		    <!-- {{ form.destination_b.errors }} -->
+		    {{ form.destination_b }}
+		    <div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group control-group {%if field.errors %}has-error{%endif%} col-md-6 date_a">
+		    <!-- {{ form.date_a.errors }} -->
+		    {{ form.date_a }}
+		    <!-- <div class="help-block with-errors"></div> -->
+		</div>
+		<div class="form-group control-group {%if field.errors %}has-error{%endif%} col-md-6 date_b">
+		    <!-- {{ form.date_b.errors }} -->
+		    {{ form.date_b }}
+		    <!-- <div class="help-block with-errors"></div> -->
+		</div>
+		<div class="form-group control-group {%if field.errors %}has-error{%endif%} ">
+		    <!-- {{ form.parcel_name.errors }} -->
+		    {{ form.parcel_name }}
+		    <div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group control-group {%if field.errors %}has-error{%endif%} ">
+		    <!-- {{ form.description.errors }} -->
+		    {{ form.description }}
+		    <div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group control-group {%if field.errors %}has-error{%endif%} ">
+		    <!-- {{ form.weight.errors }} -->
+		    {{ form.weight }}
+		    <div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group control-group {%if field.errors %}has-error{%endif%} ">
+		    <!-- {{ form.price.errors }} -->
+		    {{ form.price }}
+		    <div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group control-group {%if field.errors %}has-error{%endif%} ">
+		    <!-- {{ form.image.errors }} -->
+		    {{ form.image }}
+		    <div class="help-block with-errors"></div>
+		</div>
+	</div>
+	<div class = "col-md-8 col-md-offset-1 image">
+	    <span id='button'>Parcel picture</span>
+	    <span id='val'></span>
+	    <div class="help-block with-errors"></div>
+	</div>
+	<div class='col-md-2 button'>
+	    <input type='submit' id='send_button' class='btn btn-primary btn-lg' value='Submit' />
+	</div>
 </form>

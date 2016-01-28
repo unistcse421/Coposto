@@ -3,17 +3,15 @@
 }
 
 .header .search {
-    /* Fallback for web browsers that don't support RGBa */
     background-color: rgb(0, 0, 0);
-    /* RGBa with 0.6 opacity */
     background-color: rgba(0, 0, 0, 0.45);
-    /* For IE 5.5 - 7*/
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
-    /* For IE 8*/
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
-
-    display: table-row-group;
-    vertical-align: bottom;
+    display: block;
+    /* vertical-align: bottom; */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .header form .col-md-3, .header form .col-md-2 {
@@ -65,15 +63,13 @@
 
 .text-vertical-center img {
 	display: initial !important;
-	max-height: 225px !important;
-	/*display: block;*/
-	/*height: auto;*/
-	/*max-height: 100%;*/
+	/*max-height: 225px !important;*/
+    width: 20%;
+    height: auto;
 }
 
 .text-vertical-center div {
-	margin-top: -100px;
-	padding-left: 12px;
+	
 }
 
 .search .img-rounded {
@@ -123,6 +119,14 @@
 	background: rgb(255, 90, 95);
 }
 
+/* Modal for signin/singup/help */
+
+#mainModal .modal-body {
+    overflow: hidden;
+}
+
+/* Bottom area styles */
+
 .about {
 	padding-top: 0;
 }
@@ -136,72 +140,120 @@
 	padding-right: 0;
 }
 
-.send_form_area {
+.send_area_div {
 	margin-top: 21px;
 }
 
-.send_form_area input, .send_form_area textarea {
+.date_b .input-group .form-control {
+	position: static !important; 
+}
+
+.date_b .help-block {
+	margin-top: 4% !important;
+}
+
+.dest_b .help-block {
+	margin-top: 2% !important;
+}
+
+.send_area_div .form-control {
+	margin-bottom: 10px;
+}
+
+.send_area_div .form-group {
+	margin-bottom: 0;
+}
+
+.send_area_div .help-block {
+	position: absolute;
+    text-align: right;
+    right: 10px;
+    margin-top: -38px;
+}
+
+.send_area_div .help-block ul {
+	background: white;
+}
+
+.image .error_div .with-errors {
+    color: #a94442;
+}
+
+.image .help-block {
+	top: -4px;
+    font-size: smaller;
+    color: #A94442;
+    position: absolute;
+    right: 10px;
+    background: white;
+}
+
+.about .error_div {
+	border: 1px solid #A94442 !important;
+}
+
+.send_area_div input, .send_area_div textarea {
 	border-radius: 0;
 	font-size: larger;
 	height: 40px;
 }
 
-.send_form_area textarea {
+.send_area_div textarea {
 	height: 80px !important;
 }
 
-.send_form_area input[name=destination_a], .send_form_area input[name=date_a]  {
+.send_area_div input[name=destination_a], .send_area_div input[name=date_a]  {
 	float: left;
 	width: 50%;
 	border-right: 0;
 }
 
-.send_form_area input[name=destination_b], .send_form_area input[name=date_b] {
+.send_area_div input[name=destination_b], .send_area_div input[name=date_b] {
 	border-left: 0;
 	width: 50%;
 }
 
-.send_form_area input[name=date_a] {
+.send_area_div input[name=date_a] {
 	float: left;
 	width: 100%;
 }
 
-.send_form_area input[name=date_a], .send_form_area input[name=date_b] {
+.send_area_div input[name=date_a], .send_area_div input[name=date_b] {
 	width: 100%;
 }
 
-.send_form_area .date_a {
+.send_area_div .date_a {
 	float: left;
 }
 
-.send_form_area .input-group {
+.send_area_div .input-group {
 	float: left;
 }
 
-.send_form_area .input-group input {
+.send_area_div .input-group input {
 	line-height: 20px;
 }
 
-.send_form_area .input-group-addon {
+.send_area_div .input-group-addon {
 	line-height: 26px;
 	border-radius: 0;
 	width: 16.67%;
 }
 
-.send_form_area .col-md-6, .send_form_area .col-md-12 {
-	padding: 0;
+.send_area_div .col-md-6, .send_area_div .col-md-12 {
+	padding: 0 !important;
 }
 
-.send_form_area .col-md-6 {
-	padding-bottom: 10px;
+.send_area_div .col-md-6 {
+	/*padding-bottom: 10px !important;*/
 }
 
-.send_form_area .col-md-12 .input-group {
+.send_area_div .col-md-12 .input-group {
 	width: 100%;
 }
 
 
-.send_form_area .fieldWrapper {
+.send_area_div .fieldWrapper {
 	margin-top: 10px;
 }
 
@@ -252,7 +304,7 @@
 	background: rgb(255, 90, 95);
 }
 
-.send_form_area input[name='image'] {
+.send_area_div input[name='image'] {
 	
     display: none;
 }
@@ -269,6 +321,8 @@
     float: left;
     padding-left: 0;
     padding-right: 0;
+    max-height: 43px;
+    overflow: hidden;
 }
 
 .about .image #button {
