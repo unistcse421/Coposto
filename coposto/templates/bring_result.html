@@ -1,0 +1,134 @@
+<div class="row" id="bring_form_result">
+    <h1>Results:</h1>
+    <div class="table-responsive text-left">
+        <table id="bring_table" class="table table-striped table-hover table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th style="display: none;">ID</th>
+                    <th>Author</th>
+                    <th>Parcel name</th>
+                    <th>Description</th>
+                    <th>Weight</th>
+                    <th>Price</th>
+                    <th>Picture</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for p in parcels %}
+                <tr>
+                    <td style="display: none;">
+                        {{p.id}}
+                    </td>
+                    <td>
+                        {{p.profile_a.first_name}}
+                    </td>
+                    <td>
+                        {{p.parcel_name}}
+                    </td>
+                    <td>
+                        {{p.description}}
+                    </td>
+                    <td class="text-center">
+                        {{p.weight}}
+                    </td>
+                    <td class="text-center">
+                        {{p.price}}
+                    </td>
+                    <td class="text-center">
+                        <a target="_blank" href="media/parcel_{{p.id}}/picture.png"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="row bring_total_box">
+            <div class="col-md-9">
+                <h4>
+                    You are about to earn <strong id="total_price"></strong> dollars, by bringing <strong id="total_weight"></strong> kg stuff!
+                </h4>
+            </div>
+            <div class="col-md-3 text-right submit_button">
+                <button id="bring_button" class="btn btn-primary btn-lg">Submit</button>
+            </div>
+        </div>
+    </div>
+    <div id="success_text" class="alert alert-success">
+        <strong>Successfully submitted!</strong> You will be notified soon. Reloading the page...
+    </div>
+</div>
+    <script type="text/javascript">
+    var table = $('#bring_table').DataTable({
+          "lengthChange": false,
+          "order": [[ 4, 'asc' ], [ 5, 'desc' ]],
+          "searching": false
+    });
+ 
+    $('#bring_table tbody').on( 'click', 'tr', function () {
+        $(this).toggleClass('info');
+    } );
+
+    function item_data(index) {
+        return $.map(table.rows('.info').data(), function (item) {
+            return Number(item[index])
+        });
+    }
+
+    var parcel_ids = [];
+
+    $('#bring_table tbody').on( 'click', 'tr', function () {
+        var n_rows = table.rows('.info').data().length;
+        console.log(n_rows +' row(s) selected');
+        if (n_rows > 0) {
+            
+            parcel_ids = item_data(0);
+
+            var total_weight = 0, total_price = 0;
+            $.each(item_data(4), function() {
+                total_weight += this;
+            });
+            $.each(item_data(5), function() {
+                total_price += this;
+            });
+            
+            $('.bring_total_box').show();
+            $('.bring_total_box #total_weight').html(total_weight);
+            $('.bring_total_box #total_price').html(total_price);
+        }
+        else {
+            $('.bring_total_box').hide();
+        }
+    } );
+
+    $('.bring_total_box').on('click', '#bring_button', function () {
+        $.post("bring_submit/", { 'csrfmiddlewaretoken': '{{ csrf_token }}', 'parcel_ids': parcel_ids }).done(function( data ) {
+            if (data == 'success') {
+                $('#bring_form_result #success_text').show();
+                setTimeout(function() {
+                    location.reload();
+                }, 3000);
+            }
+            else if (data == 'not_logged') {
+            console.log(data);
+                $('#mainModal').modal('show');
+            }
+            else {
+
+            }
+        });
+    });
+
+
+
+    // $("#bring_table tbody tr").hover(function(event) {
+    //     console.log('hover');
+    //     $("#image").css({top: event.clientX, left: event.clientY}).show();
+    // }, function() {
+    //     // $("#image").hide();
+    // });
+ 
+    // $('#button').click( function () {
+    //     alert( table.rows('.selected').data().length +' row(s) selected' );
+    // } );
+
+    </script>
+    </script>
