@@ -28,6 +28,7 @@ class Profile(models.Model):
 	is_passport_verified = models.BooleanField(default=False)
 	is_phone_verified = models.BooleanField(default=False)
 	success_rate =  models.FloatField(default=0.0)
+	date = models.DateField(default=date.today)
 
 class Avatar(models.Model):
 	"""docstring for Avatar"""
