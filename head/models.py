@@ -61,6 +61,16 @@ class Review(models.Model):
 class Image(models.Model):
 	item = models.ForeignKey(Parcel, default=0)
 	image = models.ImageField(upload_to=functions.parcel_image_directory_path)
+
+#changed by Alibek 64~72
+class Zip(models.Model):
+    parcelCategory = models.ForeignKey(ParcelCategory);
+    city = models.ForeignKey(City);
+    profile = models.ForeignKey(Profile);
+    avatar = models.ForeignKey(Avatar);
+    parcel = models.ForeignKey(Parcel);
+    review = models.ForeignKey(Review);
+    image = models.ForeignKey(Image);
 	# thumbnail = models.ImageField(upload_to='parcel_images/%Y/%m/%d')
 	# isthumbnail = models.BooleanField(default=False)
 	# def create_thumbnail(self):

@@ -1,5 +1,7 @@
-from django.conf.urls import url, include
+from django.conf.urls import url, include, patterns
 from head.views import RegistrationViewUniqueEmail
+from rest_framework.urlpatterns import format_suffix_patterns#changed by Alibek
+from head import views #changed by Alibek
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -23,5 +25,11 @@ urlpatterns = [
     url(r'^accounts/send_list/$', views.user_send_list),
     url(r'^accounts/bring_list/$', views.user_bring_list),
     url(r'^bring_result/$', views.bring_result),
-    url(r'^accounts/', include('registration.backends.hmac.urls'))
+    url(r'^accounts/', include('registration.backends.hmac.urls')),
+    url(r'^api/$', views.ZipList.as_view()),#changed by Alibek
+    url(r'^api/(?P<pk>[0-9]+)/$', views.ZipDetail.as_view()),#changed by Alibek
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns = format_suffix_patterns(urlpatterns)#changed by Alibek
+
