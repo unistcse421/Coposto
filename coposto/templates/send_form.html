@@ -1,6 +1,6 @@
 <form action='#' id="send_form" method='post'>{% csrf_token %}
 	<div class="col-md-8 col-md-offset-1 send_area_div">
-		<h2 class="text-left">Fill the form:</h2>
+		<h2 class="text-left">{{ send_form_title }}</h2>
 		{{ form.non_field_errors }}
 		<div class="form-group control-group {%if field.errors %}has-error{%endif%} dest_a">
 			<!-- {{ form.destination_a.errors }} -->
@@ -49,14 +49,14 @@
 		</div>
 	</div>
 	<div class = "col-md-8 col-md-offset-1 image">
-	    <span id='button'>Parcel picture</span>
+	    <span id='button'>{{ parcel_picture }}</span>
 	    <span id='val'></span>
 	    <div class="help-block with-errors"></div>
 	</div>
 	<div class='col-md-2 button'>
-	    <input type='submit' id='send_button' class='btn btn-primary btn-lg' value='Submit' />
+	    <input type='submit' id='send_button' class='btn btn-primary btn-lg' value='{{ submit_text }}' />
 	</div>
 	<div id="success_text" class="alert alert-success">
-		<strong>Successfully submitted!</strong> You will be emailed as soon as someone is ready to help. Reloading page...
+		{{ success_text_send_form | safe }}
 	</div>
 </form>

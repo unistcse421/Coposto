@@ -47,7 +47,9 @@ def send_form_view(request):
 	if request.is_ajax():
 		if request.method == 'GET':
 			send_form = ParcelForm(auto_id=False)
-			html = render_to_string('send_form.html', {'form': send_form}, RequestContext(request))
+			context = functions.home_context
+			context['form'] = send_form
+			html = render_to_string('send_form.html', context, RequestContext(request))
 		elif request.method == 'POST':
 			# A POST request
 			send_form = ParcelForm(request.POST)
@@ -90,7 +92,12 @@ class RegistrationViewUniqueEmail(RegistrationView):
 def login(request):
 	if request.method == 'POST':
 		return HttpResponse('no!')
-	return render(request, 'login_form.html')
+	return render(request, 'login_form.html', functions.home_context)
+
+def register(request):
+	if request.method == 'POST':
+		return HttpResponse('no!')
+	return render(request, 'registration/registration_form.html', functions.home_context)	
 
 @csrf_protect
 def login_result(request):
@@ -150,9 +157,12 @@ def bring_result(request):
 	if p.exists():
 		csrf_token_value = request.COOKIES['csrftoken']
 	    # c = {"panelDisplays": panelDisplays, }
-		html = render_to_string('bring_result.html', {'parcels':p, 'csrf_token': csrf_token_value})
+		context = functions.home_context
+		context['parcels'] = p
+		context['csrf_token'] =  csrf_token_value
+		html = render_to_string('bring_result.html', context)
 	else:
-		html = '<h1>Sorry, there are no records!</h1>'
+		html = '<h1>' + functions.home_context['no_records'] + '</h1>'
 
 	# if profile.exists() and profile[0].password == paswrd:
 	# 	print ('Successfully logged in')
