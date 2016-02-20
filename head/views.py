@@ -9,19 +9,7 @@ from head.forms import RegistrationFormUniqueEmail
 import datetime, json, sys
 from head.models import City, Avatar, Profile, Parcel, Image
 from head.forms import ParcelForm
-from head.serializers import ZipSerializer#changed by Alibek
-from rest_framework import generics#changed by Alibek
-from head.models import Zip#changed by Alibek
 import functions
-
-#changed by Alibek 17~24
-class ZipList(generics.ListCreateAPIView):
-    queryset = Zip.objects.all()
-    serializer_class = ZipSerializer
-
-class ZipDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Zip.objects.all()
-    serializer_class = ZipSerializer
 
 def index(request):
     # latest_question_list = Question.objects.order_by('-pub_date')[:5]
