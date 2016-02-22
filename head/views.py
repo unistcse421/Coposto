@@ -115,8 +115,8 @@ def login_result(request):
 def bring_result(request):
 	if request.method == 'GET':
 		return HttpResponse('no!')
-	location_a = request.POST.get('from')
-	location_b = request.POST.get('to')
+	location_a = request.POST.get('from').encode('utf-8')
+	location_b = request.POST.get('to').encode('utf-8')
 	date = request.POST.get('date')
 
 	location_a, location_b, date = location_a.strip(), location_b.strip(), date.strip()
@@ -187,8 +187,8 @@ def send_result(request):
 	if request.method == 'GET':
 		return HttpResponse('no!')
 
-	destination_a = request.POST.get('destination_a').strip()
-	destination_b = request.POST.get('destination_b').strip()
+	destination_a = request.POST.get('destination_a').encode('utf-8').strip()
+	destination_b = request.POST.get('destination_b').encode('utf-8').strip()
 
 	city_a = get_destination(destination_a)
 	city_b = get_destination(destination_b)
