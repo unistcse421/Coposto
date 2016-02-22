@@ -24,7 +24,7 @@ def bring_parcel_email(parcel, bringer):
 	recipient = parcel.profile_a.email
 
 	# Create message
-	msg = MIMEText(msg_plain)
+	msg = MIMEText(msg_plain.encode('utf-8'))
 	msg['Subject'] = "COPOSTO: Нашелся Доставщик вашей посылки"
 	msg['From'] = sender
 	msg['To'] = recipient
