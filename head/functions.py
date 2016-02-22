@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import hashlib, sys
-from django.core.mail import send_mail
+import smtplib
+from email.mime.text import MIMEText
 from django.template.loader import render_to_string
 
 def hashPass(raw_password):
@@ -18,13 +19,23 @@ def bring_parcel_email(parcel, bringer):
 	msg_plain = render_to_string('bring_parcel_email.txt', {'parcel': parcel, 'sender': parcel.profile_a, 'bringer': bringer})
 	# msg_html = render_to_string('templates/email.html', {'some_params': some_params})
 
-	send_mail(
-	    'COPOSTO: We found a person to bring your parcel',
-	    msg_plain,
-	    'info@coposto.com',
-	    [parcel.profile_a.email],
-	    html_message='',
-	)
+	# Define to/from
+	sender = 'admin@coposto.com'
+	recipient = parcel.profile_a.email
+
+	# Create message
+	msg = MIMEText(msg_plain)
+	msg['Subject'] = "COPOSTO: Нашелся Доставщик вашей посылки"
+	msg['From'] = sender
+	msg['To'] = recipient
+
+	# Create server object with SSL option
+	server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
+
+	# Perform operations via server
+	server.login('admin@coposto.com', 'tentechunist')
+	server.sendmail(sender, [recipient], msg.as_string())
+	server.quit()
 
 def isEnglish(s):
     try:
