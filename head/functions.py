@@ -26,6 +26,14 @@ def bring_parcel_email(parcel, bringer):
 	    html_message='',
 	)
 
+def isEnglish(s):
+    try:
+        s.decode('ascii')
+    except UnicodeDecodeError:
+        return False
+    else:
+        return True
+
 home_context = {'title': 'COPOSTO',
     			'description': 'Из рук в руки',
     			'send_form_title': 'Заполните форму:',

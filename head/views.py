@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_protect
 from registration.backends.simple.views import RegistrationView
 from head.forms import RegistrationFormUniqueEmail
 import datetime, json, sys
-from head.models import City, Avatar, Profile, Parcel, Image
+from head.models import City, City_Russian, Avatar, Profile, Parcel, Image
 from head.forms import ParcelForm
 import functions
 
@@ -19,10 +19,11 @@ def index(request):
 
 def city_search(request):
 	def getCities(input_string):
-		return City.objects.filter(city__startswith=input_string)
-	input_string = request.GET.get('q')
+		return City_Russian.objects.filter(city__startswith=input_string).extra(select={'length':'Length(city)'}).order_by('length')
+	input_string = request.GET.get('q').encode('utf-8').strip()
+	
 	objs = getCities(input_string);
-	cities = [ ('{0}, {1}'.format(p.city, p.country)) for p in objs ]
+	cities = [ ('{0}, {1}'.format(p.city.encode('utf-8'), p.country.encode('utf-8'))) for p in objs ]
 	idler = [ ('{0}'.format(p.id)) for p in objs ]
 	res = {}
 	res['values'] = cities
@@ -108,7 +109,7 @@ def login_result(request):
 
 	print ('Login or password is wrong')
 
-	return HttpResponse('fail');
+	return HttpResponse('fail')
 
 @csrf_protect
 def bring_result(request):
@@ -127,7 +128,7 @@ def bring_result(request):
 	city_a = get_destination(location_a)
 	city_b = get_destination(location_b)
 	
-	if (not isinstance(city_a, City) or not isinstance(city_b, City)):
+	if (not isinstance(city_a, City_Russian) or not isinstance(city_b, City_Russian)):
 		return HttpResponse('fail') # dests_error
 
 	date = get_date(date)
@@ -192,7 +193,7 @@ def send_result(request):
 	city_a = get_destination(destination_a)
 	city_b = get_destination(destination_b)
 	
-	if (not isinstance(city_a, City) or not isinstance(city_b, City)):
+	if (not isinstance(city_a, City_Russian) or not isinstance(city_b, City_Russian)):
 		return HttpResponse('dests_error')
 
 	date_a = request.POST.get('date_a').strip()
@@ -244,7 +245,7 @@ def send_form_validator(request):
 	if key == 'destination_a' or key == 'destination_b':
 		try:
 			arr = value.split(", ")
-			if not City.objects.filter(city=arr[0], country=arr[1]).exists():
+			if not City_Russian.objects.filter(city=arr[0], country=arr[1]).exists():
 				print('City does not exist in db')
 			else:
 				return HttpResponse(status = 200);
@@ -364,7 +365,7 @@ def user_bring_list(request):
 def get_destination(dest):
 	try:
 		arr = dest.split(", ")
-		city = City.objects.filter(city=arr[0], country=arr[1])
+		city = City_Russian.objects.filter(city=arr[0], country=arr[1])
 		if not city.exists():
 			return -2 # City does not exist in db
 		else:

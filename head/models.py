@@ -16,6 +16,15 @@ class City(models.Model):
     country = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
 
+class City_Russian(models.Model):
+    id = models.IntegerField(primary_key=True)  # AutoField?
+    city = models.TextField(blank=True, null=True)  # This field type is a guess.
+    country = models.TextField(blank=True, null=True)  # This field type is a guess.
+
+    class Meta:
+        managed = False
+        db_table = 'head_city_russian'
+
 class Profile(models.Model):
 	# user = models.ForeignKey(User, unique=True)
 	first_name = models.CharField(max_length=20, default='John')
@@ -41,8 +50,8 @@ class Parcel(models.Model):
 	profile_b = models.ForeignKey(Profile, related_name='%(class)s_requests_createdPB', blank=True, null=True)
 	profiles_b = models.ManyToManyField(Profile, blank=True)
 	done = models.BooleanField(default=False)
-	destination_a = models.ForeignKey(City, related_name='%(class)s_requests_createdA')
-	destination_b = models.ForeignKey(City, related_name='%(class)s_requests_createdB')
+	destination_a = models.ForeignKey(City_Russian, related_name='%(class)s_requests_createdA')
+	destination_b = models.ForeignKey(City_Russian, related_name='%(class)s_requests_createdB')
 	date_a = models.DateField()
 	date_b = models.DateField()
 	parcel_name = models.CharField(max_length=100)
@@ -62,15 +71,6 @@ class Image(models.Model):
 	item = models.ForeignKey(Parcel, default=0)
 	image = models.ImageField(upload_to=functions.parcel_image_directory_path)
 
-#changed by Alibek 64~72
-class Zip(models.Model):
-    parcelCategory = models.ForeignKey(ParcelCategory);
-    city = models.ForeignKey(City);
-    profile = models.ForeignKey(Profile);
-    avatar = models.ForeignKey(Avatar);
-    parcel = models.ForeignKey(Parcel);
-    review = models.ForeignKey(Review);
-    image = models.ForeignKey(Image);
 	# thumbnail = models.ImageField(upload_to='parcel_images/%Y/%m/%d')
 	# isthumbnail = models.BooleanField(default=False)
 	# def create_thumbnail(self):

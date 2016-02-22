@@ -6,6 +6,9 @@ from django.conf.urls.static import static
 
 from . import views
 
+from rest_framework import routers
+from head.api import views as api_views
+
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^city/$', views.city_search),
@@ -24,5 +27,6 @@ urlpatterns = [
     url(r'^accounts/bring_list/$', views.user_bring_list),
     url(r'^bring_result/$', views.bring_result),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/login', api_views.login)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

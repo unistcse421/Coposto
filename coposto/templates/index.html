@@ -406,13 +406,13 @@
 
 	$('#prefetch .typeahead').typeahead(
         {
-          minLength: 3,
+          minLength: 2,
           highlight: true
         },{
         name: 'cities',
         display: 'value',
         source: cities.ttAdapter(),
-        minLength: 3, // send AJAX request only after user type in at least 3 characters
+        minLength: 2, // send AJAX request only after user type in at least 3 characters
         limit: 5 // limit to show only 10 results
     });
 
@@ -573,13 +573,13 @@
 
                 $('#prefetch2 .typeahead').typeahead(
                     {
-                      minLength: 3,
+                      minLength: 2,
                       highlight: true
                     },{
                     name: 'cities',
                     display: 'value',
                     source: cities.ttAdapter(),
-                    minLength: 3, // send AJAX request only after user type in at least 3 characters
+                    minLength: 2, // send AJAX request only after user type in at least 3 characters
                     limit: 5 // limit to show only 10 results
                 });
 
