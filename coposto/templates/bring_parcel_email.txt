@@ -1,15 +1,13 @@
-Hello, {{ sender.first_name }}
-We have a great news for you!
-{{ bringer.first_name }} is ready to bring your parcel!
-Please, send email to {{ bringer.email }} to finish the transaction.
+Здравствуйте, {{ sender.first_name }}
+Замечательные новости для вас!
+{{ bringer.first_name }} Готов доставить вашу посылку.
+Пожалуйста отправьте сообщение на {{ bringer.email }}, для детального обсуждения транзакции.
 
-We would like to remind you that the parcel info as follows:
 
-- Parcel name: {{ parcel.parcel_name }}
-- Parcel description: {{ parcel.description }}
-- Weight: {{ parcel.weight }}
-- Price: {{ parcel.price }}
+Название посылки: {{ parcel.parcel_name }}
+Описание посылки: {{ parcel.description }}
+Вес: {{ parcel.weight }}
+Стоимость доставки: {{ parcel.price }}
 
-Thank you,
-
-COPOSTO team.
+С уважением, 
+Команда COPOSTO

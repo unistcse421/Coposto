@@ -3,6 +3,7 @@ import hashlib, sys
 import smtplib
 from email.mime.text import MIMEText
 from django.template.loader import render_to_string
+from email.header import Header
 
 def hashPass(raw_password):
 	return hashlib.sha1(raw_password).hexdigest()
@@ -24,8 +25,8 @@ def bring_parcel_email(parcel, bringer):
 	recipient = parcel.profile_a.email
 
 	# Create message
-	msg = MIMEText(msg_plain.encode('utf-8'))
-	msg['Subject'] = "COPOSTO: Нашелся Доставщик вашей посылки".encode('utf-8')
+	msg = MIMEText(msg_plain.encode('utf-8'), 'plain', 'UTF-8')
+	msg['Subject'] = Header('COPOSTO: Нашелся Доставщик вашей посылки', 'utf-8')
 	msg['From'] = sender
 	msg['To'] = recipient
 
@@ -62,7 +63,7 @@ home_context = {'title': 'COPOSTO',
                 'logout': 'Выйти',
                 'help': 'Помощь',
                 'weight': 'Вес',
-                'price': 'Цена доставки',
+                'price': 'Цена доставки посылки',
                 'parcel_picture': 'Рисунок',
                 'parcel_name': 'Наименование посылки',
                 'parcel_description': 'Описание',
