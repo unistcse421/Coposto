@@ -1,0 +1,6 @@
+Hello, COPOSTO admin
+
+There is a new {{ model_name }}. Please, check {{ model_admin_address }}
+
+С уважением,
+Команда COPOSTO

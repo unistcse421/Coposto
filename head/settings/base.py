@@ -96,13 +96,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -152,6 +155,15 @@ TEMPLATES = [
 ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
 
 AUTH_PROFILE_MODULE = "head.Profile"
+
+PARCELS_DEFAULT_OWNER_EMAIL = 'info@coposto.com'
+
+ADMIN_EMAIL_LIST = {
+    'beknazar23@gmail.com',
+    'talapbaev@yahoo.com',
+    'info@coposto.com',
+    'all@coposto.com',
+}
 
 # if DEBUG:
 #     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
