@@ -53,7 +53,7 @@
         <nav>
             <ul class="sidebar-nav">
                 <li>
-                    <a href="#" id="help_button">   
+                    <a href="#" id="help_button">
                         {{ help }}
                     </a>
                 </li>
@@ -131,7 +131,7 @@
     <div class="modal fade" id="mainModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                
+
             </div>
         </div>
     </div>
@@ -143,7 +143,7 @@
                 <div class="row text-center">
                     <div class="col-md-10 col-md-offset-1">
                         <div class = "sliding_section row">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -151,7 +151,7 @@
             </div>
             <!-- /.container -->
         </section>
-        
+
 
         <!-- Footer -->
         <footer>
@@ -163,13 +163,13 @@
                         <p>50 UNIST-gil<br>Ульсан, Южная Kорея</p>
                         <ul class="list-unstyled">
                             <li><i class="fa fa-phone fa-fw"></i> (82) 10 3555-4651</li>
-                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:admin@tentech.io">admin1@coposto.com</a>
+                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="info@coposto.com">info@coposto.com</a>
                             </li>
                         </ul>
                         <br>
                         <ul class="list-inline">
                             <li>
-                                <a href="https://www.facebook.com/tentech.io"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                                <a href="https://www.facebook.com/coposto/"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
@@ -179,7 +179,7 @@
                             </li>
                         </ul>
                         <hr class="small">
-                        <p class="text-muted">Copyright &copy; COPOSTO 2015</p>
+                        <p class="text-muted">Copyright &copy; COPOSTO 2016</p>
                     </div>
                 </div>
             </div>
@@ -188,8 +188,8 @@
     </div>
 
 	<!-- DatePicker -->
-    <script src="static/js/bootstrap-datepicker.js"></script>    
-    
+    <script src="static/js/bootstrap-datepicker.js"></script>
+
     <!-- Typeahead -->
     <script src="static/js/typeahead.bundle.js"></script>
 
@@ -227,7 +227,7 @@
         var url = (section == "signin" ? "/accounts/login/" : "/accounts/register/");
         $.ajax({
             type: "GET",
-            url: url, 
+            url: url,
             data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
             success : function(data) {
                 // console.log(data);
@@ -249,9 +249,9 @@
                 console.log('form is fully valid');
                 var form = document.forms.namedItem("registration_form");
                 var formData = new FormData(form);
-                
+
                 formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-                
+
                 var req = new XMLHttpRequest(), responseText;
                 req.open("POST", "/accounts/reg_result/")
                 req.send(formData);
@@ -268,7 +268,7 @@
                                 $('#registration_form #success_text').hide();
                                 location.reload();
                             }, 3000);
-                            
+
                         }
 
                     }
@@ -277,7 +277,7 @@
             }
         }
     });
-    
+
     $(document).one('click', '#login_form', function(e) {
         $('#login_form').validator();
         console.log('validator activated');
@@ -291,9 +291,9 @@
                 console.log('form is fully valid');
                 var form = document.forms.namedItem("login_form");
                 var formData = new FormData(form);
-                
+
                 formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-                
+
                 var req = new XMLHttpRequest(), responseText;
                 req.open("POST", "/accounts/login_result/")
                 req.send(formData);
@@ -314,7 +314,7 @@
                                 success_text.hide();
                                 location.reload();
                             }, 3000);
-                            
+
                         }
 
                     }
@@ -329,7 +329,7 @@
             $('.sliding_section').html(data);
             $('.sliding_section').slideDown();
         });
-        
+
     });
 
     $(document).on('submit', '#bring_form', function (e) {
@@ -340,9 +340,9 @@
                 console.log('bring_form');
                 var form = document.forms.namedItem("bring_form");
                 var formData = new FormData(form);
-                
+
                 formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-                
+
                 var req = new XMLHttpRequest(), responseText;
                 req.open("POST", "bring_result/")
                 req.send(formData);
@@ -351,9 +351,9 @@
                     if (req.readyState == XMLHttpRequest.DONE) {
                         var responseText = JSON.parse(req.responseText);
                         var result_text = responseText.result_text;
-                        
+
                         if (result_text == 'fail') {
-                            
+
                         }
                         else if (result_text == 'success') {
                             $('.sliding_section').html(responseText.html);
@@ -363,7 +363,7 @@
                             // setTimeout(function() {
                             //     location.reload();
                             // }, 3000);
-                            
+
                         }
 
                     }
@@ -383,9 +383,9 @@
     }).on('changeDate', function(ev) {
         checkin.hide();
     }).data('datepicker');
-    
 
-    // Instantiate the Bloodhound suggestion engine    
+
+    // Instantiate the Bloodhound suggestion engine
     var cities = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -454,7 +454,7 @@
             else {
                 anti_errorize_send_form();
                 console.log('Picture is valid');
-                return true;    
+                return true;
             }
         }
         return false;
@@ -468,9 +468,9 @@
             if (isPictureOk) {
                 var form = document.forms.namedItem("send_form");
                 var formData = new FormData(form);
-                
+
                 formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-                
+
                 var req = new XMLHttpRequest(), responseText;
                 req.open("POST", "send_result/")
                 req.send(formData);
@@ -478,19 +478,18 @@
                 req.onreadystatechange = function() {
                     if (req.readyState == XMLHttpRequest.DONE) {
                         responseText = req.responseText;
-                        
+
                         if (responseText == 'fail') {
-                            
+
                         }
                         else if (responseText == 'success') {
                             $('#send_form #success_text').show();
                             setTimeout(function() {
                                 location.reload();
                             }, 3000);
-                            
+
                         }
                         else if (responseText == 'not_logged') {
-                            console.log(responseText);
                             $('#mainModal').modal('show');
                         }
 
@@ -515,10 +514,17 @@
         var clicks = $(this).data('clicks');
         $.ajax({
             type: "GET",
-            url: "/send_form_view", 
+            url: "/send_form_view",
             data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
             success : function(data) {
                 $('.sliding_section').html(data);
+                var is_logged = "{{ request.session.is_logged }}"
+                // if (is_logged != true && !clicks) {
+                //     $('#mainModal').modal('show');
+                //     $('#mainModal').on('hidden.bs.modal', function () {
+                //         $('#registration_form').validator('destroy');
+                //     })
+                // }
 
                 $("#checkin").on('input', function (e) {
                     console.log($(this).val());
@@ -551,7 +557,7 @@
                 $('input[name="price"]').attr('type', 'number');
                 $('input[name="price"]').attr('step', '0.01');
                 $('input[name="weight"]').attr('step', '0.01');
-                
+
                 $('form#send_form :input').each(function(e) {
                     $(this).attr('data-delay', '2000');
                 // $(this).blur(function()
@@ -628,21 +634,21 @@
 
     $(document).on('click', ".btn-pref .btn", function () {
         $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
-        // $(".tab").addClass("active"); // instead of this do the below 
-        $(this).removeClass("btn-default").addClass("btn-primary");   
+        // $(".tab").addClass("active"); // instead of this do the below
+        $(this).removeClass("btn-default").addClass("btn-primary");
     });
 
     $(document).on('click','#logout_button', function () {
         $.ajax({
             type: "GET",
-            url: "/accounts/logout/", 
+            url: "/accounts/logout/",
             data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
             success : function(data) {
                 location.reload();
             }
         });
     });
-    
+
 });
 
 

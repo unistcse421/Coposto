@@ -4,3 +4,5 @@ from head.settings.base import *
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+PARCELS_DEFAULT_OWNER_EMAIL = 'beknazar23@gmail.com'
