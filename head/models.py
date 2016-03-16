@@ -64,18 +64,28 @@ class Avatar(models.Model):
 
 class Parcel(models.Model):
     profile_a = models.ForeignKey(Profile,
-                related_name='%(class)s_requests_createdPA')
-    profile_b = models.ForeignKey(Profile, related_name='%(class)s_requests_createdPB', blank=True, null=True)
+                                  related_name='createdPA')
+    profile_b = models.ForeignKey(Profile,
+                                  related_name='createdPB',
+                                  blank=True, null=True)
     profiles_b = models.ManyToManyField(Profile, blank=True)
     done = models.BooleanField(default=False)
-    destination_a = models.ForeignKey(City_Russian, related_name='%(class)s_requests_createdA')
-    destination_b = models.ForeignKey(City_Russian, related_name='%(class)s_requests_createdB')
+    destination_a = models.ForeignKey(City_Russian, related_name='requests_createdA')
+    destination_b = models.ForeignKey(City_Russian, related_name='requests_createdB')
     date_a = models.DateField()
     date_b = models.DateField()
     parcel_name = models.CharField(max_length=100)
-    description = models.CharField(max_length=200, default='')
+    description = models.TextField(default='')
     price = models.FloatField()
     weight = models.FloatField()
+    date = models.DateField(default=date.today)
+
+
+class Bringer(models.Model):
+    profile = models.ForeignKey(Profile, related_name='bringer')
+    destination_a = models.ForeignKey(City_Russian, related_name='requests_createdA')
+    destination_b = models.ForeignKey(City_Russian, related_name='requests_createdB')
+    flight_date = models.DateField()
     date = models.DateField(default=date.today)
 
 

@@ -13,7 +13,8 @@ from django.views.decorators.csrf import csrf_protect
 
 from registration.backends.simple.views import RegistrationView
 from head.forms import RegistrationFormUniqueEmail
-from head.models import City, City_Russian, Avatar, Profile, Parcel, Image
+from head.models import (City, City_Russian, Avatar, Profile, Parcel,
+                         Image, Bringer)
 from head.forms import ParcelForm
 
 
@@ -149,39 +150,42 @@ def bring_result(request):
     city_a = get_destination(location_a)
     city_b = get_destination(location_b)
 
-    if (not isinstance(city_a, City_Russian) or not isinstance(city_b, City_Russian)):
-        return HttpResponse('fail') # dests_error
+    if (not isinstance(city_a, City_Russian) or
+            not isinstance(city_b, City_Russian)):
+        # dests_error
+        return HttpResponse('fail')
 
     date = get_date(date)
 
     if (not isinstance(date, str)):
-        return HttpResponse('fail') # date error
+        # date error
+        return HttpResponse('fail')
 
     logged_profile = 0
     if 'logged_id' in request.session and request.session['logged_id']:
         logged_id = request.session['logged_id']
-        logged_profile = Profile.objects.get(id = logged_id)
+        logged_profile = Profile.objects.get(id=logged_id)
 
-    p = Parcel.objects.filter(done=False,destination_a=city_a,destination_b=city_b,date_a__lte=date,date_b__gte=date).exclude(profile_a=logged_profile)
+    p = Parcel.objects.filter(done=False, destination_a=city_a,
+                              destination_b=city_b, date_a__lte=date,
+                              date_b__gte=date).exclude(
+                                profile_a=logged_profile)
 
+    context = functions.home_context
     if p.exists():
         csrf_token_value = request.COOKIES['csrftoken']
         # c = {"panelDisplays": panelDisplays, }
-        context = functions.home_context
         context['parcels'] = p
-        context['csrf_token'] =  csrf_token_value
+        context['csrf_token'] = csrf_token_value
         html = render_to_string('bring_result.html', context)
     else:
-        html = '<h1>' + functions.home_context['no_records'] + '</h1>'
+        
+        bringer, created = Bringer.objects.get_or_create(profile=profile,
+                                                destination_a=city_a,
+                                                destination_b=city_b,
+                                                flight_date=date)
+        html = render_to_string('bring_no_result.html', context)
 
-    # if profile.exists() and profile[0].password == paswrd:
-    #   print ('Successfully logged in')
-    #   request.session['is_logged'] = True
-    #   request.session['logged_id'] = profile[0].id
-    #   request.session['logged_name'] = profile[0].first_name
-    #   return HttpResponse('success')
-
-    # print ('Login or password is wrong')
     res = {'result_text': 'success',
            'html': html}
     return HttpResponse(json.dumps(res), content_type="application/json")
@@ -192,7 +196,7 @@ def bring_submit(request):
     if request.method == 'GET':
         return HttpResponse('no!')
 
-    if 'is_logged' in request.session and request.session['is_logged']:
+    if functions.is_logged(request):
         profile = Profile.objects.get(id=request.session['logged_id'])
         parcel_ids = map(int, request.POST.getlist("parcel_ids[]"))
 

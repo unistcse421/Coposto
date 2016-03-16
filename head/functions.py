@@ -82,6 +82,10 @@ def isEnglish(s):
     else:
         return True
 
+
+def is_logged(request):
+    return 'is_logged' in request.session and request.session['is_logged']
+
 home_context = {'title': 'COPOSTO',
                 'description': 'Из рук в руки',
                 'send_form_title': 'Заполните форму:',
@@ -98,7 +102,7 @@ home_context = {'title': 'COPOSTO',
                 'login': 'Войти',
                 'logout': 'Выйти',
                 'help': 'Помощь',
-                'weight': 'Вес',
+                'weight': 'Вес (кг)',
                 'price': 'Назначаемая цена доставки посылки ($)',
                 'parcel_picture': 'Рисунок',
                 'parcel_name': 'Наименование посылки',
