@@ -127,7 +127,7 @@ home_context = {'title': 'COPOSTO',
                 'help': 'Помощь',
                 'weight': 'Вес (кг)',
                 'price': 'Назначаемая цена доставки посылки ($)',
-                'parcel_picture': 'Рисунок',
+                'parcel_picture': 'Рисунок [опциональный]',
                 'parcel_name': 'Наименование посылки',
                 'parcel_description': 'Описание',
 

@@ -255,24 +255,26 @@ def send_result(request):
                     weight=weight,
                     price=price)
 
+<<<<<<< HEAD
+    parcel.save()
+    # send email to admins
+    functions.notice_admin('parcel')
+    if ('is_logged' in request.session and
+            request.session['is_logged'] and
+            'logged_id' in request.session):
+        logged_id = request.session['logged_id']
+        profile = Profile.objects.get(id=logged_id)
+        parcel.profile_a = profile
+        parcel.save(update_fields=['profile_a'])
+        return HttpResponse('success')
+    else:
+        print('not logged in')
+        request.session['parcel_id'] = parcel.id
+        return HttpResponse('not_logged')
+
     if request.FILES and request.FILES['image']:
-        parcel.save()
         image = Image(item=parcel, image=request.FILES['image'])
         image.save()
-        # send email to admins
-        functions.notice_admin('parcel')
-        if ('is_logged' in request.session and
-                request.session['is_logged'] and
-                'logged_id' in request.session):
-            logged_id = request.session['logged_id']
-            profile = Profile.objects.get(id=logged_id)
-            parcel.profile_a = profile
-            parcel.save(update_fields=['profile_a'])
-            return HttpResponse('success')
-        else:
-            print('not logged in')
-            request.session['send_parcel_id'] = parcel.id
-            return HttpResponse('not_logged')
 
     return HttpResponse('fail')
 

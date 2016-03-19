@@ -75,9 +75,11 @@
         </nav>
         <div class="text-vertical-center">
             <!-- <h1>COPOSTO</h1> -->
-            <div>
-                <img class="img-responsive" src="static/img/logo.png"/>
-            </div>
+            <a href="http://coposto.com/">
+                <div>
+                    <img class="img-responsive" src="static/img/logo.png"/>
+                </div>
+            </a>
             <h3>{{ description }}</h3>
             <br>
             <a href="#send_form" id="send_form_button" class="btn btn-primary btn-lg">{{ send_text }}</a>
@@ -435,9 +437,11 @@
     function picture_validation_send_form(obj) {
         var fileName = obj.val();
         if (!fileName) {
-            errorize_send_form('Please attach a picture');
+            // errorize_send_form('Please attach a picture');
             if ($('#button').html().slice(-1) == ':')
                 $('#button').text($('#button').html().slice(0, -1));
+            console.log('Picture is valid');
+            return true;
         }
         else {
             var ext = fileName.split('.').pop().toLowerCase();
@@ -448,7 +452,7 @@
             if ($.inArray(ext, ['gif','png','jpg','jpeg']) == -1) {
                 errorize_send_form('Please attach only gif/png/jpg/jpeg');
             }
-            else if (obj[0].files[0].size > 3*1024*1024) {
+            else if (obj[0].files[0].size > 20*1024*1024) {
                 errorize_send_form('Picture size must be less than 3 MB');
             }
             else {
