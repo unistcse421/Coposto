@@ -1,7 +1,7 @@
 import datetime
 import json
 import sys
-import functions
+from transliterate import translit
 
 from django.conf import settings
 from django.shortcuts import render_to_response, render
@@ -10,8 +10,9 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
-
 from registration.backends.simple.views import RegistrationView
+
+import functions
 from head.forms import RegistrationFormUniqueEmail
 from head.models import (City, City_Russian, Avatar, Profile, Parcel,
                          Image, Bringer)
@@ -28,7 +29,12 @@ def index(request):
 def city_search(request):
     def getCities(input_string):
         return City_Russian.objects.filter(city__startswith=input_string).extra(select={'length':'Length(city)'}).order_by('length')
-    input_string = request.GET.get('q').encode('utf-8').strip()
+
+    q = request.GET.get('q')
+    if functions.isEnglish(q.encode('utf-8')):
+        q = translit(q.encode('utf-8').strip(), 'ru')
+
+    input_string = q.title()
 
     objs = getCities(input_string)
     cities = [('{0}, {1}'.format(p.city.encode('utf-8'),
@@ -119,17 +125,7 @@ def login_result(request):
         request.session['is_logged'] = True
         request.session['logged_id'] = profile[0].id
         request.session['logged_name'] = profile[0].first_name
-        if 'parcel_id' in request.session:
-            try:
-                parcel_id = request.session['parcel_id']
-                parcel = Parcel.objects.get(id=parcel_id)
-                parcel.profile_a = profile
-                parcel.save(update_fields=['profile_a'])
-                del request.session['parcel_id']
-            except Parcel.DoesNotExist:
-                print 'problem'
-                return HttpResponse('fail')
-        return HttpResponse('success')
+
 
     print ('Login or password is wrong')
 
@@ -161,29 +157,34 @@ def bring_result(request):
         # date error
         return HttpResponse('fail')
 
-    logged_profile = 0
+    profile = 0
     if 'logged_id' in request.session and request.session['logged_id']:
         logged_id = request.session['logged_id']
-        logged_profile = Profile.objects.get(id=logged_id)
+        profile = Profile.objects.get(id=logged_id)
+    else:
+        print('not logged in')
+        request.session['send_parcel_id'] = parcel.id
+        profile = Profile.objects.get(email=settings.PARCELS_DEFAULT_OWNER_EMAIL)
+        bringer, created = Bringer.objects.get_or_create(profile=profile,
+                                                         destination_a=city_a,
+                                                         destination_b=city_b,
+                                                         flight_date=date)
+        request.session['bring_parcel_id'] = bringer.id
 
-    p = Parcel.objects.filter(done=False, destination_a=city_a,
-                              destination_b=city_b, date_a__lte=date,
-                              date_b__gte=date).exclude(
-                                profile_a=logged_profile)
+    parcel = Parcel.objects.filter(done=False,
+                                   destination_a=city_a,
+                                   destination_b=city_b,
+                                   date_a__lte=date,
+                                   date_b__gte=date)
 
     context = functions.home_context
-    if p.exists():
-        csrf_token_value = request.COOKIES['csrftoken']
-        # c = {"panelDisplays": panelDisplays, }
-        context['parcels'] = p
-        context['csrf_token'] = csrf_token_value
+    csrf_token_value = request.COOKIES['csrftoken']
+    context['csrf_token'] = csrf_token_value
+    context['is_logged'] = request.session['is_logged']
+    if parcel.exists():
+        context['parcels'] = parcel
         html = render_to_string('bring_result.html', context)
     else:
-        
-        bringer, created = Bringer.objects.get_or_create(profile=profile,
-                                                destination_a=city_a,
-                                                destination_b=city_b,
-                                                flight_date=date)
         html = render_to_string('bring_no_result.html', context)
 
     res = {'result_text': 'success',
@@ -270,12 +271,8 @@ def send_result(request):
             return HttpResponse('success')
         else:
             print('not logged in')
-            request.session['parcel_id'] = parcel.id
+            request.session['send_parcel_id'] = parcel.id
             return HttpResponse('not_logged')
-    else:
-        print('not logged in')
-        request.session['filled_bring_form'] = True
-        return HttpResponse('not_logged')
 
     return HttpResponse('fail')
 

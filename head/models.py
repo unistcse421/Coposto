@@ -63,15 +63,12 @@ class Avatar(models.Model):
 
 
 class Parcel(models.Model):
-    profile_a = models.ForeignKey(Profile,
-                                  related_name='createdPA')
-    profile_b = models.ForeignKey(Profile,
-                                  related_name='createdPB',
-                                  blank=True, null=True)
-    profiles_b = models.ManyToManyField(Profile, blank=True)
+    profile_a = models.ForeignKey(Profile, related_name='profile_a_parcel')
+    profile_b = models.ForeignKey(Profile, related_name='profile_b_parcel', blank=True, null=True)
+    profiles_b = models.ManyToManyField(Profile, related_name='profiles_b_parcel', blank=True)
     done = models.BooleanField(default=False)
-    destination_a = models.ForeignKey(City_Russian, related_name='requests_createdA')
-    destination_b = models.ForeignKey(City_Russian, related_name='requests_createdB')
+    destination_a = models.ForeignKey(City_Russian, related_name='destination_a_parcel')
+    destination_b = models.ForeignKey(City_Russian, related_name='destination_b_parcel')
     date_a = models.DateField()
     date_b = models.DateField()
     parcel_name = models.CharField(max_length=100)
@@ -82,23 +79,23 @@ class Parcel(models.Model):
 
 
 class Bringer(models.Model):
-    profile = models.ForeignKey(Profile, related_name='bringer')
-    destination_a = models.ForeignKey(City_Russian, related_name='requests_createdA')
-    destination_b = models.ForeignKey(City_Russian, related_name='requests_createdB')
+    profile = models.ForeignKey(Profile, related_name='profile_bringer')
+    destination_a = models.ForeignKey(City_Russian, related_name='destination_a_bringer')
+    destination_b = models.ForeignKey(City_Russian, related_name='destination_b_bringer')
     flight_date = models.DateField()
     date = models.DateField(default=date.today)
 
 
 class Review(models.Model):
-    profile_a = models.ForeignKey(Profile, related_name='%(class)s_requests_createdA')
-    profile_b = models.ForeignKey(Profile, related_name='%(class)s_requests_createdB')
+    profile_a = models.ForeignKey(Profile, related_name='profile_a_review')
+    profile_b = models.ForeignKey(Profile, related_name='profile_b_review')
     title = models.CharField(max_length=30)
     text = models.TextField(max_length=200)
     date = models.DateField(default=date.today)
 
 
 class Image(models.Model):
-    item = models.ForeignKey(Parcel, default=0)
+    item = models.ForeignKey(Parcel, related_name='item_image', default=0)
     image = models.ImageField(upload_to=functions.parcel_image_directory_path)
 
     # thumbnail = models.ImageField(upload_to='parcel_images/%Y/%m/%d')
