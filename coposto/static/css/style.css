@@ -397,6 +397,12 @@
 	display: none;
 }
 
+/* Bring no result */
+
+.bring_no_result {
+    font-size: 16px;
+}
+
 /* USER PROFILE PAGE */
  .card {
     margin-top: 20px;

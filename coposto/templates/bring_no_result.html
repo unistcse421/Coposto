@@ -1,0 +1,22 @@
+<div class="row bring_no_result">
+    <h2>{{ no_records }}</h2>
+    {{ is_logged }}
+    <p>
+        Would you like to get a notification, when we find a customer for the given date in your route?
+    </p>
+    <div>
+        <button type="submit" id="yes_button" class="btn btn-primary">Hell. yeah!</button>
+    </div>
+</div>
+<script type="text/javascript">
+$('#yes_button').on('click', function(e) {
+    var is_logged = '{{ is_logged }}';
+    console.log(is_logged);
+    if (!is_logged) {
+        $('#mainModal').modal('show');
+    }
+    else {
+        
+    }
+})
+</script>

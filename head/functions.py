@@ -82,6 +82,33 @@ def isEnglish(s):
     else:
         return True
 
+
+def is_logged(request):
+    return 'is_logged' in request.session and request.session['is_logged']
+
+def save_parcel_profile(request, ):
+    if 'send_parcel_id' in request.session:
+        try:
+            parcel_id = request.session['send_parcel_id']
+            parcel = Parcel.objects.get(id=parcel_id)
+            parcel.profile_a = profile
+            parcel.save(update_fields=['profile_a'])
+            del request.session['parcel_id']
+        except Parcel.DoesNotExist:
+            print 'problem'
+            return HttpResponse('fail')
+    if 'bring_parcel_id' in request.session:
+        try:
+            parcel_id = request.session['bring_parcel_id']
+            parcel = Bring.objects.get(id=parcel_id)
+            parcel.profile = profile
+            parcel.save(update_fields=['profile'])
+            del request.session['bring_parcel_id']
+        except Bring.DoesNotExist:
+            print 'problem'
+            return HttpResponse('fail')
+    return HttpResponse('success')
+
 home_context = {'title': 'COPOSTO',
                 'description': 'Из рук в руки',
                 'send_form_title': 'Заполните форму:',
@@ -89,8 +116,8 @@ home_context = {'title': 'COPOSTO',
                 'submit_text': 'Готово',
                 'send_text': 'Отправить',
                 'bring_text': 'Доставить',
-                'from_dest': 'Откуда [кириллица]',
-                'to_dest': 'Куда [кириллица]',
+                'from_dest': 'Откуда',
+                'to_dest': 'Куда',
                 'from_date': 'От',
                 'to_date': 'До',
                 'date': 'Дата',
@@ -98,7 +125,7 @@ home_context = {'title': 'COPOSTO',
                 'login': 'Войти',
                 'logout': 'Выйти',
                 'help': 'Помощь',
-                'weight': 'Вес',
+                'weight': 'Вес (кг)',
                 'price': 'Назначаемая цена доставки посылки ($)',
                 'parcel_picture': 'Рисунок [опциональный]',
                 'parcel_name': 'Наименование посылки',

@@ -1,7 +1,7 @@
 import datetime
 import json
 import sys
-import functions
+from transliterate import translit
 
 from django.conf import settings
 from django.shortcuts import render_to_response, render
@@ -10,10 +10,12 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
-
 from registration.backends.simple.views import RegistrationView
+
+import functions
 from head.forms import RegistrationFormUniqueEmail
-from head.models import City, City_Russian, Avatar, Profile, Parcel, Image
+from head.models import (City, City_Russian, Avatar, Profile, Parcel,
+                         Image, Bringer)
 from head.forms import ParcelForm
 
 
@@ -27,7 +29,12 @@ def index(request):
 def city_search(request):
     def getCities(input_string):
         return City_Russian.objects.filter(city__startswith=input_string).extra(select={'length':'Length(city)'}).order_by('length')
-    input_string = request.GET.get('q').encode('utf-8').strip()
+
+    q = request.GET.get('q')
+    if functions.isEnglish(q.encode('utf-8')):
+        q = translit(q.encode('utf-8').strip(), 'ru')
+
+    input_string = q.title()
 
     objs = getCities(input_string)
     cities = [('{0}, {1}'.format(p.city.encode('utf-8'),
@@ -118,17 +125,7 @@ def login_result(request):
         request.session['is_logged'] = True
         request.session['logged_id'] = profile[0].id
         request.session['logged_name'] = profile[0].first_name
-        if 'parcel_id' in request.session:
-            try:
-                parcel_id = request.session['parcel_id']
-                parcel = Parcel.objects.get(id=parcel_id)
-                parcel.profile_a = profile
-                parcel.save(update_fields=['profile_a'])
-                del request.session['parcel_id']
-            except Parcel.DoesNotExist:
-                print 'problem'
-                return HttpResponse('fail')
-        return HttpResponse('success')
+
 
     print ('Login or password is wrong')
 
@@ -149,39 +146,47 @@ def bring_result(request):
     city_a = get_destination(location_a)
     city_b = get_destination(location_b)
 
-    if (not isinstance(city_a, City_Russian) or not isinstance(city_b, City_Russian)):
-        return HttpResponse('fail') # dests_error
+    if (not isinstance(city_a, City_Russian) or
+            not isinstance(city_b, City_Russian)):
+        # dests_error
+        return HttpResponse('fail')
 
     date = get_date(date)
 
     if (not isinstance(date, str)):
-        return HttpResponse('fail') # date error
+        # date error
+        return HttpResponse('fail')
 
-    logged_profile = 0
+    profile = 0
     if 'logged_id' in request.session and request.session['logged_id']:
         logged_id = request.session['logged_id']
-        logged_profile = Profile.objects.get(id = logged_id)
+        profile = Profile.objects.get(id=logged_id)
+    else:
+        print('not logged in')
+        request.session['send_parcel_id'] = parcel.id
+        profile = Profile.objects.get(email=settings.PARCELS_DEFAULT_OWNER_EMAIL)
+        bringer, created = Bringer.objects.get_or_create(profile=profile,
+                                                         destination_a=city_a,
+                                                         destination_b=city_b,
+                                                         flight_date=date)
+        request.session['bring_parcel_id'] = bringer.id
 
-    p = Parcel.objects.filter(done=False,destination_a=city_a,destination_b=city_b,date_a__lte=date,date_b__gte=date).exclude(profile_a=logged_profile)
+    parcel = Parcel.objects.filter(done=False,
+                                   destination_a=city_a,
+                                   destination_b=city_b,
+                                   date_a__lte=date,
+                                   date_b__gte=date)
 
-    if p.exists():
-        csrf_token_value = request.COOKIES['csrftoken']
-        # c = {"panelDisplays": panelDisplays, }
-        context = functions.home_context
-        context['parcels'] = p
-        context['csrf_token'] =  csrf_token_value
+    context = functions.home_context
+    csrf_token_value = request.COOKIES['csrftoken']
+    context['csrf_token'] = csrf_token_value
+    context['is_logged'] = request.session['is_logged']
+    if parcel.exists():
+        context['parcels'] = parcel
         html = render_to_string('bring_result.html', context)
     else:
-        html = '<h1>' + functions.home_context['no_records'] + '</h1>'
+        html = render_to_string('bring_no_result.html', context)
 
-    # if profile.exists() and profile[0].password == paswrd:
-    #   print ('Successfully logged in')
-    #   request.session['is_logged'] = True
-    #   request.session['logged_id'] = profile[0].id
-    #   request.session['logged_name'] = profile[0].first_name
-    #   return HttpResponse('success')
-
-    # print ('Login or password is wrong')
     res = {'result_text': 'success',
            'html': html}
     return HttpResponse(json.dumps(res), content_type="application/json")
@@ -192,7 +197,7 @@ def bring_submit(request):
     if request.method == 'GET':
         return HttpResponse('no!')
 
-    if 'is_logged' in request.session and request.session['is_logged']:
+    if functions.is_logged(request):
         profile = Profile.objects.get(id=request.session['logged_id'])
         parcel_ids = map(int, request.POST.getlist("parcel_ids[]"))
 
@@ -250,6 +255,7 @@ def send_result(request):
                     weight=weight,
                     price=price)
 
+<<<<<<< HEAD
     parcel.save()
     # send email to admins
     functions.notice_admin('parcel')
