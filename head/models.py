@@ -25,9 +25,9 @@ class City_Russian(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
     city = models.TextField(blank=True, null=True)  # This field type is a guess.
     country = models.TextField(blank=True, null=True)  # This field type is a guess.
+    hits = models.PositiveIntegerField(default=0)
 
     class Meta:
-        managed = False
         db_table = 'head_city_russian'
 
     def __unicode__(self):
@@ -53,7 +53,7 @@ class Profile(models.Model):
     date = models.DateField(default=date.today)
 
     def __unicode__(self):
-        return self.first_name + ' ' + self.last_name
+        return self.first_name + ', ' + self.email
 
 
 class Avatar(models.Model):
@@ -63,32 +63,39 @@ class Avatar(models.Model):
 
 
 class Parcel(models.Model):
-    profile_a = models.ForeignKey(Profile,
-                related_name='%(class)s_requests_createdPA')
-    profile_b = models.ForeignKey(Profile, related_name='%(class)s_requests_createdPB', blank=True, null=True)
-    profiles_b = models.ManyToManyField(Profile, blank=True)
+    profile_a = models.ForeignKey(Profile, related_name='profile_a_parcel')
+    profile_b = models.ForeignKey(Profile, related_name='profile_b_parcel', blank=True, null=True)
+    profiles_b = models.ManyToManyField(Profile, related_name='profiles_b_parcel', blank=True)
     done = models.BooleanField(default=False)
-    destination_a = models.ForeignKey(City_Russian, related_name='%(class)s_requests_createdA')
-    destination_b = models.ForeignKey(City_Russian, related_name='%(class)s_requests_createdB')
+    destination_a = models.ForeignKey(City_Russian, related_name='destination_a_parcel')
+    destination_b = models.ForeignKey(City_Russian, related_name='destination_b_parcel')
     date_a = models.DateField()
     date_b = models.DateField()
     parcel_name = models.CharField(max_length=100)
-    description = models.CharField(max_length=200, default='')
+    description = models.TextField(default='')
     price = models.FloatField()
     weight = models.FloatField()
     date = models.DateField(default=date.today)
 
 
+class Bringer(models.Model):
+    profile = models.ForeignKey(Profile, related_name='profile_bringer')
+    destination_a = models.ForeignKey(City_Russian, related_name='destination_a_bringer')
+    destination_b = models.ForeignKey(City_Russian, related_name='destination_b_bringer')
+    flight_date = models.DateField()
+    date = models.DateField(default=date.today)
+
+
 class Review(models.Model):
-    profile_a = models.ForeignKey(Profile, related_name='%(class)s_requests_createdA')
-    profile_b = models.ForeignKey(Profile, related_name='%(class)s_requests_createdB')
+    profile_a = models.ForeignKey(Profile, related_name='profile_a_review')
+    profile_b = models.ForeignKey(Profile, related_name='profile_b_review')
     title = models.CharField(max_length=30)
     text = models.TextField(max_length=200)
     date = models.DateField(default=date.today)
 
 
 class Image(models.Model):
-    item = models.ForeignKey(Parcel, default=0)
+    item = models.ForeignKey(Parcel, related_name='item_image', default=0)
     image = models.ImageField(upload_to=functions.parcel_image_directory_path)
 
     # thumbnail = models.ImageField(upload_to='parcel_images/%Y/%m/%d')

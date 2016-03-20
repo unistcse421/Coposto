@@ -23,8 +23,8 @@
     <link href="static/css/datepicker.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 
     <!-- jQuery -->
     <script src="static/js/jquery.js"></script>
@@ -47,6 +47,9 @@
 </head>
 
 <body>
+    <div id="overlay-back"></div>
+    <div id="overlay"><i class="fa fa-refresh fa-spin" style="font-size:240px; color:white;"></i>
+</div>
     <!-- Header -->
     <header id="top" class="header">
         <!-- Navigation -->
@@ -149,7 +152,71 @@
                         </div>
                     </div>
                 </div>
+                <hr />
                 <!-- /.row -->
+                <div class = "parcel_list text-center col-ms-2">
+                    <h3>{{ last_parcels }}:</h3>
+                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                      <!-- Indicators -->
+                      <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active">
+                        </li>
+                        <li data-target="#carousel-example-generic" data-slide-to="1">
+                        </li>
+                        <li data-target="#carousel-example-generic" data-slide-to="2">
+                        </li>
+                        <li data-target="#carousel-example-generic" data-slide-to="3">
+                        </li>
+                        <li data-target="#carousel-example-generic" data-slide-to="4">
+                        </li>
+                      </ol>
+
+                      <!-- Wrapper for slides -->
+                      <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                          <img src="static/img/parcels/1.jpg"/>
+                          <div class="carousel-caption">
+
+                          </div>
+                        </div>
+                        <div class="item">
+                          <img src="static/img/parcels/2.jpg"/>
+                          <div class="carousel-caption">
+
+                          </div>
+                        </div>
+                        <div class="item">
+                          <img src="static/img/parcels/3.jpg"/>
+                          <div class="carousel-caption">
+
+                          </div>
+                        </div>
+                        <div class="item">
+                          <img src="static/img/parcels/4.jpg"/>
+                          <div class="carousel-caption">
+
+                          </div>
+                        </div>
+                        <div class="item">
+                          <img src="static/img/parcels/5.jpg"/>
+                          <div class="carousel-caption">
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Controls -->
+                      <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">{{ previous }}</span>
+                      </a>
+                      <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">{{ next }}</span>
+                      </a>
+                    </div>
+
+                </div>
             </div>
             <!-- /.container -->
         </section>
@@ -201,6 +268,20 @@
     <!-- Custom Theme JavaScript -->
     <script>
     $(document).ready(function() {
+
+    $(document).bind('ajaxStart', function(){
+        $('#overlay, #overlay-back').fadeIn(500);
+    }).bind('ajaxStop', function(){
+        $('#overlay, #overlay-back').fadeOut(500);
+    });
+
+    $('.carousel-control.left').click(function() {
+      $('#carousel-example-generic').carousel('prev');
+    });
+
+    $('.carousel-control.right').click(function() {
+      $('#carousel-example-generic').carousel('next');
+    });
 
     // Scrolls to the selected menu item on the page
     $(function() {
@@ -282,7 +363,6 @@
 
     $(document).one('click', '#login_form', function(e) {
         $('#login_form').validator();
-        console.log('validator activated');
     });
 
     $(document).on('submit', '#login_form', function (e) {
@@ -327,7 +407,7 @@
     });
 
     $(document).on('click', '#account_button', function() {
-        $.get('accounts/account_view/', function(data) {
+        $.get('accounts/view/', function(data) {
             $('.sliding_section').html(data);
             $('.sliding_section').slideDown();
         });
@@ -344,32 +424,29 @@
                 var formData = new FormData(form);
 
                 formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-
-                var req = new XMLHttpRequest(), responseText;
-                req.open("POST", "bring_result/")
-                req.send(formData);
-
-                req.onreadystatechange = function() {
-                    if (req.readyState == XMLHttpRequest.DONE) {
-                        var responseText = JSON.parse(req.responseText);
-                        var result_text = responseText.result_text;
-
-                        if (result_text == 'fail') {
-
+                $.ajax({
+                    type: 'POST',
+                    url: 'bring_result/',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        result_text = response.success;
+                        if (!response.success) {
+                            alert(response.reason);
                         }
-                        else if (result_text == 'success') {
-                            $('.sliding_section').html(responseText.html);
+                        else if (response.success) {
+                            $('.sliding_section').html(response.html);
                             $('.sliding_section').slideDown();
-
-
-                            // setTimeout(function() {
-                            //     location.reload();
-                            // }, 3000);
-
                         }
-
+                    },
+                    error: function(xhr, status, error) {
+                        var msg = JSON.parse(xhr.responseText);
+                        console.log('ERROR!');
+                        console.log(msg.Message);
                     }
-                }
+                });
+
                 return false;
             }
         }
@@ -386,20 +463,27 @@
         checkin.hide();
     }).data('datepicker');
 
+    function increment_city_count(eventObject, suggestionObject, datasetName) {
+        $.ajax({
+            type: 'POST',
+            url: 'city/',
+            data: {'city_id': suggestionObject.id, csrfmiddlewaretoken: "{{ csrf_token }}"},
+            global: false
+        });
+    }
 
     // Instantiate the Bloodhound suggestion engine
     var cities = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
-        // prefetch: '../data/films/post_1960.json',
         remote: {
             url: '/city/?q=%QUERY',
-            filter: function(x) {
-                return $.map(x, function(item) {
-                    return {value: item};
-                });
-            },
-            wildcard: '%QUERY'
+            wildcard: '%QUERY',
+            ajax: {
+                global: false,
+                beforeSend: function(){ console.log("beforeSend callback called!"); },
+                complete: function(){ console.log("complete callback called!"); }
+            }
         }
     });
 
@@ -408,14 +492,19 @@
 
 	$('#prefetch .typeahead').typeahead(
         {
-          minLength: 2,
+          minLength: 1,
           highlight: true
         },{
         name: 'cities',
         display: 'value',
         source: cities.ttAdapter(),
-        minLength: 2, // send AJAX request only after user type in at least 3 characters
         limit: 5 // limit to show only 10 results
+    });
+
+    $(document).on('typeahead:selected typeahead:autocompleted', increment_city_count);
+
+    $(document).on('typeahead:asynccancel typeahead:asyncreceive', function() {
+        $('#overlay, #overlay-back').hide();
     });
 
     function errorize_send_form(error_txt) {
@@ -472,33 +561,33 @@
             if (isPictureOk) {
                 var form = document.forms.namedItem("send_form");
                 var formData = new FormData(form);
-
                 formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-
-                var req = new XMLHttpRequest(), responseText;
-                req.open("POST", "send_result/")
-                req.send(formData);
-                console.log('send_form')
-                req.onreadystatechange = function() {
-                    if (req.readyState == XMLHttpRequest.DONE) {
-                        responseText = req.responseText;
-
-                        if (responseText == 'fail') {
+                $.ajax({
+                    type: 'POST',
+                    url: 'send_result/',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log('send_form')
+                        if (response == 'fail') {
 
                         }
-                        else if (responseText == 'success') {
+                        else if (response == 'success') {
                             $('#send_form #success_text').show();
                             setTimeout(function() {
                                 location.reload();
-                            }, 3000);
-
+                            }, 1000);
                         }
-                        else if (responseText == 'not_logged') {
+                        else if (response == 'not_logged') {
                             $('#mainModal').modal('show');
                         }
-
+                    },
+                    error: function(xhr, status, error) {
+                        var msg = JSON.parse(xhr.responseText);
+                        console.log(msg.Message);
                     }
-                }
+                });
             }
             return false;
         }
@@ -583,14 +672,13 @@
 
                 $('#prefetch2 .typeahead').typeahead(
                     {
-                      minLength: 2,
+                      minLength: 1,
                       highlight: true
                     },{
                     name: 'cities',
                     display: 'value',
                     source: cities.ttAdapter(),
-                    minLength: 2, // send AJAX request only after user type in at least 3 characters
-                    limit: 5 // limit to show only 10 results
+                    limit: 5,
                 });
 
                 var nowTemp = new Date();
@@ -625,14 +713,16 @@
 
         });
         if (clicks) {
-            $('.sliding_section').slideUp();
+            // $('.sliding_section').slideUp();
         } else {
-            $('.sliding_section').slideDown();
+            // $('.sliding_section').slideDown();
             $('#send_form').submit(function(e) {
                 // e.preventDefault();
                 console.log('submitted');
             });
         }
+        $('.sliding_section').fadeIn(300);
+        $('.about hr').show();
         $(this).data("clicks", !clicks);
     });
 

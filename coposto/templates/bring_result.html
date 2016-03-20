@@ -1,156 +1,54 @@
 <div class="row" id="bring_form_result">
     <h1>{{ bring_form_result }}</h1>
-    <div class="table-responsive text-left">
-        <table id="bring_table" class="table table-striped table-hover table-bordered" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th style="display: none;">ID</th>
-                    <th>{{ author }}</th>
-                    <th>{{ parcel_name }}</th>
-                    <th>{{ parcel_description }}</th>
-                    <th>{{ weight }}</th>
-                    <th>{{ price }}</th>
-                    <th>{{ parcel_picture }}</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for p in parcels %}
-                <tr>
-                    <td style="display: none;">
-                        {{p.id}}
-                    </td>
-                    <td>
-                        {{p.profile_a.first_name}}
-                    </td>
-                    <td>
-                        {{p.parcel_name}}
-                    </td>
-                    <td>
-                        {{p.description}}
-                    </td>
-                    <td class="text-center">
-                        {{p.weight}}
-                    </td>
-                    <td class="text-center">
-                        {{p.price}}
-                    </td>
-                    <td class="text-center">
-                        <a target="_blank" href="media/parcel_{{p.id}}/picture.png"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span></a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <div class="row bring_total_box">
-            <div class="col-md-9">
-                <h4>
-                    {{ earn_money_text | safe }}
-                </h4>
-            </div>
-            <div class="col-md-3 text-right submit_button">
-                <button id="bring_button" class="btn btn-primary btn-lg">{{ submit_text }}</button>
-            </div>
-        </div>
-    </div>
-    <div id="success_text" class="alert alert-success">
-        {{ success_text_bring_form | safe }}
-    </div>
+    {% include "sender_list.html" %}
 </div>
-    <script type="text/javascript">
-    var table = $('#bring_table').DataTable({
-        "lengthChange": false,
-        "order": [[ 4, 'asc' ], [ 5, 'desc' ]],
-        "searching": false,
-        "language": {
-            "processing": "Подождите...",
-            "search": "Поиск:",
-            "lengthMenu": "Показать _MENU_ записей",
-            "info": "Записи с _START_ до _END_ из _TOTAL_ записей",
-            "infoEmpty": "Записи с 0 до 0 из 0 записей",
-            "infoFiltered": "(отфильтровано из _MAX_ записей)",
-            "infoPostFix": "",
-            "loadingRecords": "Загрузка записей...",
-            "zeroRecords": "Записи отсутствуют.",
-            "emptyTable": "В таблице отсутствуют данные",
-            "paginate": {
-                "first": "Первая",
-                "previous": "Предыдущая",
-                "next": "Следующая",
-                "last": "Последняя"
-            },
-            "aria": {
-                "sortAscending": ": активировать для сортировки столбца по возрастанию",
-                "sortDescending": ": активировать для сортировки столбца по убыванию"
-            }
-        }
+<script type="text/javascript">
+function item_data(index) {
+    return $.map(table.rows('.info').data(), function (item) {
+        return Number(item[index])
     });
- 
-    $('#bring_table tbody').on( 'click', 'tr', function () {
-        $(this).toggleClass('info');
-    } );
+}
 
-    function item_data(index) {
-        return $.map(table.rows('.info').data(), function (item) {
-            return Number(item[index])
+var parcel_ids = [];
+
+$('#bring_table tbody').on( 'click', 'tr', function () {
+    var n_rows = table.rows('.info').data().length;
+    if (n_rows > 0) {
+
+        parcel_ids = item_data(0);
+
+        var total_weight = 0, total_price = 0;
+        $.each(item_data(4), function() {
+            total_weight += this;
         });
+        $.each(item_data(5), function() {
+            total_price += this;
+        });
+
+        $('.bring_total_box').show();
+        $('.bring_total_box #total_weight').html(total_weight);
+        $('.bring_total_box #total_price').html(total_price);
     }
+    else {
+        $('.bring_total_box').hide();
+    }
+} );
 
-    var parcel_ids = [];
-
-    $('#bring_table tbody').on( 'click', 'tr', function () {
-        var n_rows = table.rows('.info').data().length;
-        console.log(n_rows +' row(s) selected');
-        if (n_rows > 0) {
-            
-            parcel_ids = item_data(0);
-
-            var total_weight = 0, total_price = 0;
-            $.each(item_data(4), function() {
-                total_weight += this;
-            });
-            $.each(item_data(5), function() {
-                total_price += this;
-            });
-            
-            $('.bring_total_box').show();
-            $('.bring_total_box #total_weight').html(total_weight);
-            $('.bring_total_box #total_price').html(total_price);
+$('.bring_total_box').on('click', '#bring_button', function () {
+    $.post("bring_submit/", { 'csrfmiddlewaretoken': '{{ csrf_token }}', 'parcel_ids': parcel_ids }).done(function( data ) {
+        if (data == 'success') {
+            $('#bring_form_result #success_text').show();
+            setTimeout(function() {
+                location.reload();
+            }, 3000);
+        }
+        else if (data == 'not_logged') {
+            $('#mainModal').modal('show');
         }
         else {
-            $('.bring_total_box').hide();
+
         }
-    } );
-
-    $('.bring_total_box').on('click', '#bring_button', function () {
-        $.post("bring_submit/", { 'csrfmiddlewaretoken': '{{ csrf_token }}', 'parcel_ids': parcel_ids }).done(function( data ) {
-            if (data == 'success') {
-                $('#bring_form_result #success_text').show();
-                setTimeout(function() {
-                    location.reload();
-                }, 3000);
-            }
-            else if (data == 'not_logged') {
-            console.log(data);
-                $('#mainModal').modal('show');
-            }
-            else {
-
-            }
-        });
     });
+});
 
-
-
-    // $("#bring_table tbody tr").hover(function(event) {
-    //     console.log('hover');
-    //     $("#image").css({top: event.clientX, left: event.clientY}).show();
-    // }, function() {
-    //     // $("#image").hide();
-    // });
- 
-    // $('#button').click( function () {
-    //     alert( table.rows('.selected').data().length +' row(s) selected' );
-    // } );
-
-    </script>
-    </script>
+</script>

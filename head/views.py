@@ -1,42 +1,66 @@
 import datetime
 import json
 import sys
-import functions
+from transliterate import translit
 
 from django.conf import settings
-from django.shortcuts import render_to_response, render
-from django.template.loader import render_to_string
+from django.db.models import F
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
-from django.template.loader import render_to_string
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
+from django.template.loader import render_to_string
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_protect
-
+from django.views.generic import View
 from registration.backends.simple.views import RegistrationView
-from head.forms import RegistrationFormUniqueEmail
-from head.models import City, City_Russian, Avatar, Profile, Parcel, Image
+
 from head.forms import ParcelForm
+from head.forms import RegistrationFormUniqueEmail
+from head.models import *
+import functions
 
 
 def index(request):
     # latest_question_list = Question.objects.order_by('-pub_date')[:5]
     send_form = send_form_view(request)
     context = functions.home_context
+    csrf_token_value = request.COOKIES['csrftoken']
+    context['csrf_token'] = csrf_token_value
     return render(request, 'index.html', context)
 
 
-def city_search(request):
-    def getCities(input_string):
-        return City_Russian.objects.filter(city__startswith=input_string).extra(select={'length':'Length(city)'}).order_by('length')
-    input_string = request.GET.get('q').encode('utf-8').strip()
+class CityView(View):
 
-    objs = getCities(input_string)
-    cities = [('{0}, {1}'.format(p.city.encode('utf-8'),
-              p.country.encode('utf-8'))) for p in objs]
-    idler = [('{0}'.format(p.id)) for p in objs]
-    res = {}
-    res['values'] = cities
-    res['ids'] = idler
-    return JsonResponse(cities, safe=False)
+    def get(self, request):
+        q = request.GET.get('q')
+        if functions.isEnglish(q.encode('utf-8')):
+            q = translit(q.encode('utf-8').strip(), 'ru')
+
+        input_string = q.title()
+
+        cities = []
+        for p in self.getCities(input_string):
+            cities.append({
+                        'value': '{0}, {1}'.format(p.city.encode('utf-8'),
+                                                   p.country.encode('utf-8')),
+                        'id': '{0}'.format(p.id),
+                          })
+
+        return JsonResponse(cities, safe=False)
+
+    def post(self, request):
+        city_id = request.POST.get('city_id')
+        try:
+            City_Russian.objects.filter(id=city_id).update(hits=F('hits')+1)
+            print City_Russian.objects.get(id=city_id)
+        except:
+            pass
+        return HttpResponse('')
+
+    def getCities(self, input_string):
+        qs = City_Russian.objects.filter(city__startswith=input_string)
+        return qs.extra(select={'length': 'Length(city)'}).order_by(
+                                                            '-hits', 'length')
 
 
 @csrf_protect
@@ -47,6 +71,8 @@ def send_form_view(request):
             send_form = ParcelForm(auto_id=False)
             context = functions.home_context
             context['form'] = send_form
+            csrf_token_value = request.COOKIES['csrftoken']
+            context['csrf_token'] = csrf_token_value
             html = render_to_string('send_form.html', context, RequestContext(request))
         elif request.method == 'POST':
             # A POST request
@@ -92,13 +118,19 @@ class RegistrationViewUniqueEmail(RegistrationView):
 def login(request):
     if request.method == 'POST':
         return HttpResponse('no!')
-    return render(request, 'login_form.html', functions.home_context)
+    context = functions.home_context
+    csrf_token_value = request.COOKIES['csrftoken']
+    context['csrf_token'] = csrf_token_value
+    return render(request, 'login_form.html', context)
 
 
 def register(request):
     if request.method == 'POST':
         return HttpResponse('no!')
-    return render(request, 'registration/registration_form.html', functions.home_context)
+    context = functions.home_context
+    csrf_token_value = request.COOKIES['csrftoken']
+    context['csrf_token'] = csrf_token_value
+    return render(request, 'registration/registration_form.html', context)
 
 
 @csrf_protect
@@ -118,19 +150,10 @@ def login_result(request):
         request.session['is_logged'] = True
         request.session['logged_id'] = profile[0].id
         request.session['logged_name'] = profile[0].first_name
-        if 'parcel_id' in request.session:
-            try:
-                parcel_id = request.session['parcel_id']
-                parcel = Parcel.objects.get(id=parcel_id)
-                parcel.profile_a = profile
-                parcel.save(update_fields=['profile_a'])
-                del request.session['parcel_id']
-            except Parcel.DoesNotExist:
-                print 'problem'
-                return HttpResponse('fail')
+        set_profile_parcel(request, profile)
         return HttpResponse('success')
-
-    print ('Login or password is wrong')
+    else:
+        print('Login or password is wrong')
 
     return HttpResponse('fail')
 
@@ -139,6 +162,8 @@ def login_result(request):
 def bring_result(request):
     if request.method == 'GET':
         return HttpResponse('no!')
+    print request.POST.get('csrfmiddlewaretoken')
+
     location_a = request.POST.get('from').encode('utf-8')
     location_b = request.POST.get('to').encode('utf-8')
     date = request.POST.get('date')
@@ -149,40 +174,52 @@ def bring_result(request):
     city_a = get_destination(location_a)
     city_b = get_destination(location_b)
 
-    if (not isinstance(city_a, City_Russian) or not isinstance(city_b, City_Russian)):
-        return HttpResponse('fail') # dests_error
+    if (not isinstance(city_a, City_Russian) or
+            not isinstance(city_b, City_Russian)):
+        print location_a
+        print location_b
+        res = {'success': False, 'reason:': 'location'}
+        return HttpResponse(json.dumps(res))
 
     date = get_date(date)
 
     if (not isinstance(date, str)):
-        return HttpResponse('fail') # date error
+        res = {'success': False, 'reason:': 'date'}
+        return HttpResponse(json.dumps(res))
 
-    logged_profile = 0
+    context = functions.home_context
+    context['account_view'] = 'false'
     if 'logged_id' in request.session and request.session['logged_id']:
         logged_id = request.session['logged_id']
-        logged_profile = Profile.objects.get(id = logged_id)
+        profile = Profile.objects.get(id=logged_id)
+        context['is_logged'] = True
+    else:
+        context['is_logged'] = False
+        profile = Profile.objects.get(email=settings.PARCELS_DEFAULT_OWNER_EMAIL)
 
-    p = Parcel.objects.filter(done=False,destination_a=city_a,destination_b=city_b,date_a__lte=date,date_b__gte=date).exclude(profile_a=logged_profile)
+    bringer, created = Bringer.objects.get_or_create(profile=profile,
+                                                     destination_a=city_a,
+                                                     destination_b=city_b,
+                                                     flight_date=date)
+    if not context['is_logged']:
+        request.session['bring_parcel_id'] = bringer.id
 
-    if p.exists():
-        csrf_token_value = request.COOKIES['csrftoken']
-        # c = {"panelDisplays": panelDisplays, }
-        context = functions.home_context
-        context['parcels'] = p
-        context['csrf_token'] =  csrf_token_value
+    # Start searching among Parcel
+    parcel = Parcel.objects.filter(done=False,
+                                   destination_a=city_a,
+                                   destination_b=city_b,
+                                   date_a__lte=date,
+                                   date_b__gte=date)
+
+    csrf_token_value = request.COOKIES['csrftoken']
+    context['csrf_token'] = csrf_token_value
+    if parcel.exists():
+        context['parcels'] = parcel
         html = render_to_string('bring_result.html', context)
     else:
-        html = '<h1>' + functions.home_context['no_records'] + '</h1>'
+        html = render_to_string('bring_no_result.html', context)
 
-    # if profile.exists() and profile[0].password == paswrd:
-    #   print ('Successfully logged in')
-    #   request.session['is_logged'] = True
-    #   request.session['logged_id'] = profile[0].id
-    #   request.session['logged_name'] = profile[0].first_name
-    #   return HttpResponse('success')
-
-    # print ('Login or password is wrong')
-    res = {'result_text': 'success',
+    res = {'success': True,
            'html': html}
     return HttpResponse(json.dumps(res), content_type="application/json")
 
@@ -192,12 +229,12 @@ def bring_submit(request):
     if request.method == 'GET':
         return HttpResponse('no!')
 
-    if 'is_logged' in request.session and request.session['is_logged']:
+    if functions.is_logged(request):
         profile = Profile.objects.get(id=request.session['logged_id'])
         parcel_ids = map(int, request.POST.getlist("parcel_ids[]"))
 
         for parcel in Parcel.objects.filter(id__in=parcel_ids):
-            functions.bring_parcel_email(parcel, profile) # send email to sender
+            functions.parcel_email(parcel, profile) # send email to sender
             parcel.profiles_b.add(profile)
         return HttpResponse('success')
     else:
@@ -238,39 +275,40 @@ def send_result(request):
     if (weight < 0 or price < 0):
         return HttpResponse('weight | price < 0')
 
-    profile = Profile.objects.get(email=settings.PARCELS_DEFAULT_OWNER_EMAIL)
-
-    parcel = Parcel(profile_a=profile,
-                    destination_a=city_a,
-                    destination_b=city_b,
-                    date_a=date_a,
-                    date_b=date_b,
-                    parcel_name=parcel_name,
-                    description=description,
-                    weight=weight,
-                    price=price)
-
-    parcel.save()
-    # send email to admins
-    functions.notice_admin('parcel')
+    logged_id = None
     if ('is_logged' in request.session and
             request.session['is_logged'] and
             'logged_id' in request.session):
         logged_id = request.session['logged_id']
         profile = Profile.objects.get(id=logged_id)
-        parcel.profile_a = profile
-        parcel.save(update_fields=['profile_a'])
-        return HttpResponse('success')
     else:
-        print('not logged in')
-        request.session['parcel_id'] = parcel.id
-        return HttpResponse('not_logged')
+        profile = Profile.objects.get(email=settings.PARCELS_DEFAULT_OWNER_EMAIL)
+
+    parcel, created = Parcel.objects.get_or_create(profile_a=profile,
+                                                   destination_a=city_a,
+                                                   destination_b=city_b,
+                                                   date_a=date_a,
+                                                   date_b=date_b,
+                                                   parcel_name=parcel_name,
+                                                   description=description,
+                                                   weight=weight,
+                                                   price=price)
+
+    # send email to admins
+    functions.notice_admin('parcel')
 
     if request.FILES and request.FILES['image']:
         image = Image(item=parcel, image=request.FILES['image'])
         image.save()
 
-    return HttpResponse('fail')
+    if not logged_id:
+        print parcel
+        request.session['send_parcel_id'] = parcel.id
+        return HttpResponse('not_logged')
+    else:
+        functions.parcel_email(parcel)
+
+    return HttpResponse('success')
 
 
 def send_form_validator(request):
@@ -285,7 +323,7 @@ def send_form_validator(request):
             else:
                 return HttpResponse(status = 200)
         except:
-            return HttpResponse('Destinations are in wrong format', status = 400)
+            return HttpResponse('Destinations are in wrong format', status=400)
     elif key == 'date_a' or key == 'date_b':
         try:
             date_obj = datetime.datetime.strptime(value, "%m/%d/%Y").date()
@@ -295,7 +333,7 @@ def send_form_validator(request):
             # print date_obj
             # print date_today
         except:
-            return HttpResponse('Dates are in wrong format', status = 400)
+            return HttpResponse('Dates are in wrong format', status=400)
     elif key == 'date_a' or key == 'date_b':
         try:
             date_obj = datetime.datetime.strptime(value, "%m/%d/%Y").date()
@@ -341,22 +379,12 @@ def reg_result(request):
                       password=functions.hashPass(payload['password']))
     if Profile.objects.filter(email=payload['email']).exists():
         print('Email exists already')
-        return('exists')
+        return HttpResponse('exists')
 
     print ('Successfully new user saved')
     profile.save()
 
-    if 'parcel_id' in request.session:
-        print request.session['parcel_id']
-        try:
-            parcel_id = request.session['parcel_id']
-            parcel = Parcel.objects.get(id=parcel_id)
-            parcel.profile_a = profile
-            parcel.save(update_fields=['profile_a'])
-            del request.session['parcel_id']
-        except Parcel.DoesNotExist:
-            print 'problem'
-            return HttpResponse('fail')
+    set_profile_parcel(request, profile)
 
     # send email to admins
     functions.notice_admin('profile')
@@ -386,34 +414,34 @@ def logout(request):
     return HttpResponse('logged out')
 
 
-def account_view(request):
-    html = ''
-    if 'is_logged' in request.session and request.session['is_logged'] and 'logged_id' in request.session:
-        logged_id = request.session['logged_id']
-        try:
-            if Profile.objects.filter(id=logged_id).exists():
+class AccountView(View):
+
+    def get(self, request):
+        html = ''
+        if ('is_logged' in request.session and
+                request.session['is_logged'] and
+                'logged_id' in request.session):
+            logged_id = request.session['logged_id']
+            try:
                 p = Profile.objects.get(id=logged_id)
+                parcels = Parcel.objects.filter(profile_a=p)
+                bringers = Bringer.objects.filter(profile=p)
+                reviews = Review.objects.filter(profile_b=p)
                 has_avatar = Avatar.objects.filter(user=p).exists()
-                context = {
-                    'user_id': p.id,
-                    'first_name': p.first_name,
-                    'last_name': p.last_name,
-                    'has_avatar': has_avatar
-                }
-                print(context)
+                context = functions.home_context
+                context['has_avatar'] = has_avatar
+                context['p'] = p
+                context['parcels'] = parcels
+                context['bringers'] = bringers
+                context['reviews'] = reviews
+                context['account_view'] = 'true'
+                csrf_token_value = request.COOKIES['csrftoken']
+                context['csrf_token'] = csrf_token_value
                 html = render(request, 'account_view.html', context)
-        except:
-            print "Unexpected error:", sys.exc_info()
+            except:
+                print "Unexpected error:", sys.exc_info()
 
-    return HttpResponse(html)
-
-
-def user_send_list(request):
-    return HttpResponse('Send list')
-
-
-def user_bring_list(request):
-    return HttpResponse('Bring list')
+        return HttpResponse(html)
 
 # Helper functions
 
@@ -439,3 +467,32 @@ def get_date(value):
     except:
         print "Unexpected error:", sys.exc_info()
     return -1 # Destinations are in wrong formats
+
+
+def set_profile_parcel(request, profile):
+    if 'send_parcel_id' in request.session:
+        print request.session['send_parcel_id']
+        try:
+            parcel_id = request.session['send_parcel_id']
+            parcel = Parcel.objects.get(id=parcel_id)
+            parcel.profile_a = profile
+            parcel.save(update_fields=['profile_a'])
+            functions.parcel_email(parcel)
+            del request.session['send_parcel_id']
+        except Parcel.DoesNotExist:
+            print 'problem'
+            return False
+
+    if 'bring_parcel_id' in request.session:
+        print 'set_profile_parcel: ', request.session['bring_parcel_id']
+        try:
+            parcel_id = request.session['bring_parcel_id']
+            parcel = Bringer.objects.get(id=parcel_id)
+            parcel.profile = profile
+            parcel.save(update_fields=['profile'])
+            del request.session['bring_parcel_id']
+        except Parcel.DoesNotExist:
+            print 'problem'
+            return False
+
+    return True

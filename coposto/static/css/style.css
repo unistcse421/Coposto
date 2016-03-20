@@ -1,3 +1,35 @@
+/* For loading... */
+
+html, body {
+    width  : 100%;
+    height : 100%;
+}
+#overlay-back {
+    position   : fixed;
+    top        : 0;
+    left       : 0;
+    width      : 100%;
+    height     : 100%;
+    background : #000;
+    opacity    : 0.6;
+    filter     : alpha(opacity=60);
+    z-index    : 5;
+    display    : none;
+}
+
+#overlay {
+    position : absolute;
+    top: 50%;
+    left: 50%;
+    width: 30em;
+    height: 18em;
+    margin-left: -7em; /*set to a negative number 1/2 of your width*/
+    z-index  : 10;
+    display  : none;
+}
+
+/* Blocks */
+
 .bottom_area {
 	background-color: #edefed;
 }
@@ -70,7 +102,7 @@
 }
 
 .text-vertical-center div {
-	
+
 }
 
 .search .img-rounded {
@@ -146,7 +178,7 @@
 }
 
 .date_b .input-group .form-control {
-	position: static !important; 
+	position: static !important;
 }
 
 .date_b .help-block {
@@ -264,7 +296,7 @@
 
 #prefetch2 .twitter-typeahead {
 	position: inherit !important;
-	display: inherit !important; 
+	display: inherit !important;
 }
 
 #prefetch2 .tt-menu {
@@ -306,7 +338,7 @@
 }
 
 .send_area_div input[name='image'] {
-	
+
     display: none;
 }
 
@@ -353,6 +385,37 @@
 	display: none;
 }
 
+.about .parcel_list .item {
+    margin: auto;
+}
+
+.about .parcel_list img {
+    max-width: 400px;
+    margin: auto;
+}
+
+.about .parcel_list .carousel-control {
+    background: none !important;
+    color: #FF5A5F;
+}
+
+.about .parcel_list h3 {
+    margin: 35px 0;
+}
+
+.about hr {
+    display: none;
+    border-top-color: #FF5A5F
+}
+
+.about .sliding_section .close_button i {
+    font-size: 30px;
+    color: #777;
+    position: absolute;
+    right: 72px;
+    top: 20px;
+}
+
 .overlay {
     opacity: 0.4;
 }
@@ -372,15 +435,17 @@
 }
 
 #send_form #success_text {
-    display: none;
     position: fixed;
+}
+
+/* Common */
+
+#success_text {
+    display: none;
 }
 
 /* Reg and login forms */
 
-#mainModal #fail_text, #mainModal #success_text {
-	display: none;
-}
 
 /* Bring_form results */
 
@@ -395,6 +460,12 @@
 
 #bring_form_result #success_text {
 	display: none;
+}
+
+/* Bring no result */
+
+.bring_no_result {
+    font-size: 16px;
 }
 
 /* USER PROFILE PAGE */

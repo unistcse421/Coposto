@@ -1,3 +1,6 @@
+<div class="close_button">
+	<a href><i class="fa fa-times"></i></a>
+</div>
 <form action='#' id="send_form" method='post'>{% csrf_token %}
 	<div class="col-md-8 col-md-offset-1 send_area_div">
 		<h2 class="text-left">{{ send_form_title }}</h2>
@@ -60,3 +63,10 @@
 		{{ success_text_send_form | safe }}
 	</div>
 </form>
+<script type="text/javascript">
+$(document).on('click', '.close_button i', function(e) {
+	$('.sliding_section').slideUp();
+	$('.about hr').hide();
+	return false;
+});
+</script>
