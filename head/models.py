@@ -25,9 +25,9 @@ class City_Russian(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
     city = models.TextField(blank=True, null=True)  # This field type is a guess.
     country = models.TextField(blank=True, null=True)  # This field type is a guess.
+    hits = models.PositiveIntegerField(default=0)
 
     class Meta:
-        managed = False
         db_table = 'head_city_russian'
 
     def __unicode__(self):
@@ -53,7 +53,7 @@ class Profile(models.Model):
     date = models.DateField(default=date.today)
 
     def __unicode__(self):
-        return self.first_name + ' ' + self.last_name
+        return self.first_name + ', ' + self.email
 
 
 class Avatar(models.Model):
