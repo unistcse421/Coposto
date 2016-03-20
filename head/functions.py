@@ -24,10 +24,19 @@ def parcel_image_directory_path(instance, filename):
     return 'parcel_{0}/{1}'.format(instance.item.id, 'picture.png')
 
 
-def bring_parcel_email(parcel, bringer):
-    msg_plain = render_to_string('bring_parcel_email.txt',
-                {'parcel': parcel, 'sender': parcel.profile_a, 'bringer': bringer})
+def parcel_email(parcel, bringer=None):
     # msg_html = render_to_string('templates/email.html', {'some_params': some_params})
+    template = 'send_parcel_email.txt'
+    subject = 'COPOSTO: Ваша посылка благополучно добавлена в нашу базу'
+
+    if bringer:
+        subject = 'COPOSTO: Нашелся Доставщик вашей посылки'
+        template = 'bring_parcel_email.txt'
+
+    msg_plain = render_to_string(template,
+                                 {'parcel': parcel,
+                                  'sender': parcel.profile_a,
+                                  'bringer': bringer})
 
     # Define to/from
     sender = 'admin@coposto.com'
@@ -35,7 +44,7 @@ def bring_parcel_email(parcel, bringer):
 
     # Create message
     msg = MIMEText(msg_plain.encode('utf-8'), 'plain', 'UTF-8')
-    msg['Subject'] = Header('COPOSTO: Нашелся Доставщик вашей посылки', 'utf-8')
+    msg['Subject'] = Header(subject, 'utf-8')
     msg['From'] = sender
     msg['To'] = recipient
 
@@ -109,6 +118,7 @@ def save_parcel_profile(request, ):
             return HttpResponse('fail')
     return HttpResponse('success')
 
+
 home_context = {'title': 'COPOSTO',
                 'description': 'Из рук в руки',
                 'send_form_title': 'Заполните форму:',
@@ -156,5 +166,15 @@ home_context = {'title': 'COPOSTO',
 
                 'just_regged': False,
                 'just_regged_text': 'Congratulations! You have successfully registered.',
-                'just_logged_out_text': 'Вы успешно вышли.'
+                'just_logged_out_text': 'Вы успешно вышли.',
+
+                'last_parcels': 'Последние посылки',
+                "previous": "Предыдущая",
+                "next": "Следующая",
+
+                'your_inbox': 'Ваши разговоры',
+                'your_sender_list': 'Ваши посылки',
+                'your_bringer_list': 'Ваши полеты',
+                'your_review_list': 'Ваши отзывы',
+                # 'your_sender_list': 'Ваши разговоры',
                 }
