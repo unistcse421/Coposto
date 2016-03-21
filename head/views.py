@@ -24,8 +24,6 @@ def index(request):
     # latest_question_list = Question.objects.order_by('-pub_date')[:5]
     send_form = send_form_view(request)
     context = functions.home_context
-    csrf_token_value = request.COOKIES['csrftoken']
-    context['csrf_token'] = csrf_token_value
     return render(request, 'index.html', context)
 
 
