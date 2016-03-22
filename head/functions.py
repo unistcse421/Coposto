@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.PublicKey import RSA
 import hashlib
 import smtplib
 import sys
@@ -171,6 +173,9 @@ home_context = {'title': 'COPOSTO',
                 'last_parcels': 'Последние посылки',
                 "previous": "Предыдущая",
                 "next": "Следующая",
+
+                'wanna_get_notice_bring': 'Хотите ли вы получать уведомления об отправителях по введенным вами данным',
+                'yes!': 'Да!',
 
                 'your_inbox': 'Ваши разговоры',
                 'your_sender_list': 'Ваши посылки',
