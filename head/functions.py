@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from Crypto.Cipher import PKCS1_OAEP
-from Crypto.PublicKey import RSA
 import hashlib
 import smtplib
 import sys
