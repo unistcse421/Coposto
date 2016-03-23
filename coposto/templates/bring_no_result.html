@@ -1,10 +1,10 @@
 <div class="row bring_no_result">
     <h2>{{ no_records }}</h2>
     <p>
-        Would you like to get a notification, when we find a customer for the given date in your route?
+        {{ wanna_get_notice_bring }}
     </p>
     <div>
-        <button type="submit" id="yes_button" class="btn btn-primary">Hell. yeah!</button>
+        <button type="submit" id="yes_button" class="btn btn-primary">{{ yes }}!</button>
     </div>
 </div>
 <script type="text/javascript">
@@ -15,7 +15,7 @@ $('#yes_button').on('click', function(e) {
         $('#mainModal').modal('show');
     }
     else {
-        alert('Successfully added to your list! We will email you as soon as we find a sender')
+        alert('Успешно добавлен!')
     }
 })
 </script>

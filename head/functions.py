@@ -172,6 +172,9 @@ home_context = {'title': 'COPOSTO',
                 "previous": "Предыдущая",
                 "next": "Следующая",
 
+                'wanna_get_notice_bring': 'Хотите ли вы получать уведомления об отправителях по введенным вами данным',
+                'yes': 'Да',
+
                 'your_inbox': 'Ваши разговоры',
                 'your_sender_list': 'Ваши посылки',
                 'your_bringer_list': 'Ваши полеты',
