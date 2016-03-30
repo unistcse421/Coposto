@@ -158,6 +158,19 @@ html, body {
     overflow: hidden;
 }
 
+#registration_form .alternative-hint, #login_form .alternative-hint {
+    padding: 0px 0px 20px 15px;
+}
+
+#registration_form .alternative-hint a, #login_form .alternative-hint a {
+    padding-left: 5px;
+    vertical-align: top;
+}
+
+#fail_text {
+    display: none;
+}
+
 /* Bottom area styles */
 
 .about {

@@ -14,8 +14,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View
 from registration.backends.simple.views import RegistrationView
 
-from head.forms import ParcelForm
-from head.forms import RegistrationFormUniqueEmail
+from head.forms import ParcelForm, RegistrationFormUniqueEmail
 from head.models import *
 import functions
 
@@ -24,6 +23,7 @@ def index(request):
     # latest_question_list = Question.objects.order_by('-pub_date')[:5]
     send_form = send_form_view(request)
     context = functions.home_context
+    context['parcels'] = Parcel.objects.filter(is_featured=True)
     return render(request, 'index.html', context)
 
 

@@ -63,16 +63,23 @@
 	    <div id="success_text" class="alert alert-success">
 	    	{{ success_text_reg_form | safe }}
 		</div>
-	<div class="modal-footer">
-	    <button type="button" class="btn btn-default" data-dismiss="modal">{{ cancel }}</button>
-	    <button type="submit" class="btn btn-primary">{{ register }}</button>
-    </div>
+		<div class="modal-footer">
+		    <button type="button" class="btn btn-default" data-dismiss="modal">{{ cancel }}</button>
+		    <button type="submit" class="btn btn-primary">{{ register }}</button>
+	    </div>
+	    <hr>
+	    <div class="alternative-hint">
+	    	{{ IF_ALREADY_REGISTERED_TEXT }} <a id="login_btn" href>{{ login }}</a>
+	    </div>
     </form>
 </div>
 
 <script>
-// var btnCust = '<button type="button" class="btn btn-default" title="Add picture tags" ' +
-//     'onclick="alert(\'Call your custom code here.\')">' +
-//     '<i class="glyphicon glyphicon-tag"></i>' +
-//     '</button>';
+$(document).ready(function() {
+	$('#login_btn').on('click', function(e) {
+		$('#signupModal').modal('hide');
+		$('#signinModal').modal('show');
+		return false;
+	});
+});
 </script>
