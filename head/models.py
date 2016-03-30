@@ -29,6 +29,7 @@ class City_Russian(models.Model):
 
     class Meta:
         db_table = 'head_city_russian'
+        ordering = ('city', 'hits')
 
     def __unicode__(self):
         return self.city + ', ' + self.country
