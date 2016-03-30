@@ -64,14 +64,14 @@
                     {% if request.session.is_logged %}
                         <a href="#" id="account_button">{{ request.session.logged_name }}</a>
                     {% else %}
-                        <a href="#" data-toggle="modal" id="signup_button" data-target="#mainModal" data-whatever="signup">{{ signup }}</a>
+                        <a href="#" data-toggle="modal" id="signup_button" data-target="#signupModal">{{ signup }}</a>
                     {% endif %}
                 </li>
                 <li>
                     {% if request.session.is_logged %}
                         <a href="#" id="logout_button">{{ logout }}</a>
                     {% else %}
-                        <a href="#" data-toggle="modal" id="signin_button" data-target="#mainModal" data-whatever="signin">{{ login }}</a>
+                        <a href="#" data-toggle="modal" id="signin_button" data-target="#signinModal">{{ login }}</a>
                     {% endif %}
                 </li>
             </ul>
@@ -133,7 +133,15 @@
     </header>
 
     <!-- Modals -->
-    <div class="modal fade" id="mainModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="signinModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
 
@@ -158,64 +166,47 @@
                     <h3>{{ last_parcels }}:</h3>
                     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                       <!-- Indicators -->
-                      <ol class="carousel-indicators">
-                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active">
-                        </li>
-                        <li data-target="#carousel-example-generic" data-slide-to="1">
-                        </li>
-                        <li data-target="#carousel-example-generic" data-slide-to="2">
-                        </li>
-                        <li data-target="#carousel-example-generic" data-slide-to="3">
-                        </li>
-                        <li data-target="#carousel-example-generic" data-slide-to="4">
-                        </li>
-                      </ol>
+                        <ol class="carousel-indicators">
+                            {% for parcel in parcels %}
+                                {% if forloop.first %}
+                                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                {% else %}
+                                    <li data-target="#carousel-example-generic" data-slide-to="{{ forloop.counter0 }}"></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ol>
 
-                      <!-- Wrapper for slides -->
-                      <div class="carousel-inner" role="listbox">
-                        <div class="item active">
-                          <img src="static/img/parcels/1.jpg"/>
-                          <div class="carousel-caption">
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" role="listbox">
+                            {% for parcel in parcels %}
+                                {% if forloop.first %}
+                                    <div class="item active">
+                                        <img src="media/parcel_{{ parcel.id }}/picture.png"/>
+                                      <div class="carousel-caption">
 
-                          </div>
+                                      </div>
+                                    </div>
+                                {% else %}
+                                    <div class="item">
+                                        <img src="media/parcel_{{ parcel.id }}/picture.png"/>
+                                        <div class="carousel-caption">
+
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                        <div class="item">
-                          <img src="static/img/parcels/2.jpg"/>
-                          <div class="carousel-caption">
 
-                          </div>
-                        </div>
-                        <div class="item">
-                          <img src="static/img/parcels/3.jpg"/>
-                          <div class="carousel-caption">
-
-                          </div>
-                        </div>
-                        <div class="item">
-                          <img src="static/img/parcels/4.jpg"/>
-                          <div class="carousel-caption">
-
-                          </div>
-                        </div>
-                        <div class="item">
-                          <img src="static/img/parcels/5.jpg"/>
-                          <div class="carousel-caption">
-
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Controls -->
-                      <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">{{ previous }}</span>
-                      </a>
-                      <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                        <span class="sr-only">{{ next }}</span>
-                      </a>
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">{{ previous }}</span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">{{ next }}</span>
+                        </a>
                     </div>
-
                 </div>
             </div>
             <!-- /.container -->
@@ -302,19 +293,26 @@
 
     // Help / SignUp / SignIn forms
 
-    $('#mainModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var section = button.data('whatever') // Extract info from data-* attributes
-
-        var modal = $(this);
-        var url = (section == "signin" ? "/accounts/login/" : "/accounts/register/");
+    $('#signupModal').on('show.bs.modal', function (event) {
+        var url = "/accounts/register/";
         $.ajax({
             type: "GET",
             url: url,
             data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
             success : function(data) {
-                // console.log(data);
-                $('.modal-content').html(data);
+                $('#signupModal .modal-content').html(data);
+            }
+        });
+    });
+
+    $('#signinModal').on('show.bs.modal', function (event) {
+        var url = "/accounts/login/";
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            success : function(data) {
+                $('#signinModal .modal-content').html(data);
             }
         });
     });
@@ -580,7 +578,7 @@
                             }, 1000);
                         }
                         else if (response == 'not_logged') {
-                            $('#mainModal').modal('show');
+                            $('#signupModal').modal('show');
                         }
                     },
                     error: function(xhr, status, error) {

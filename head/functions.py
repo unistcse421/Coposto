@@ -159,10 +159,12 @@ home_context = {'title': 'COPOSTO',
                 'cancel': 'Отмена',
                 'register': 'Зарегистрироваться',
                 'success_text_reg_form': '<strong>Поздравляем!</strong> Вы успешно зарегистрировались. Перезагрузка страницы...</div>',
+                'IF_ALREADY_REGISTERED_TEXT': 'Уже зарегистрированы?',
 
                 'forgot_password': 'Забыли пароль?',
                 'fail_text_login_form': 'Вы ввели неверный логин или пароль. Пожалуйста, попробуйте еще раз.',
                 'success_text_login_form': '<strong>Вошли успешно!</strong> Перезагрузка страницы...',
+                'IF_NOT_REGISTERED_TEXT': 'Ещё не зарегистрированы?',
 
                 'just_regged': False,
                 'just_regged_text': 'Congratulations! You have successfully registered.',

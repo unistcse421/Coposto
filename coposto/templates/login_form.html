@@ -26,10 +26,17 @@
 	    <button type="button" class="btn btn-default" data-dismiss="modal">{{ cancel }}</button>
 	    <button type="submit" class="btn btn-primary">{{ login }}</button>
     </div>
-    </form>
-    <!-- <div class="row">
-	    <label class="col-md-6 text-right">New to Coposto?</label>
-        <label class="col-md-3 text-right"><button type="button" class="btn btn-info align-right">Create a new account</button></label>
-    </div>
-    <div class="row"></div> -->
-</div>
+    <hr>
+	<div class="alternative-hint">
+		{{ IF_NOT_REGISTERED_TEXT }} <a id="register_btn" href>{{ signup }}</a>
+	</div>
+</form>
+<script>
+$(document).ready(function() {
+	$('#register_btn').on('click', function(e) {
+		$('#signinModal').modal('hide');
+		$('#signupModal').modal('show');
+		return false;
+	});
+});
+</script>

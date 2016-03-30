@@ -25,9 +25,12 @@ urlpatterns = [
     url(r'^accounts/logout/$', views.logout),
     url(r'^bring_result/$', views.bring_result),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-auth/', include('rest_framework.urls',
+                            namespace='rest_framework')),
     url(r'^api/login', api_views.login),
     url(r'^api/register', api_views.register),
     url(r'^api/send', api_views.send),
-    url(r'^api/bring', api_views.bring)
+    url(r'^api/bring', api_views.bring),
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': 'media'}),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
