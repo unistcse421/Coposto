@@ -75,6 +75,7 @@ class Parcel(models.Model):
     description = models.TextField(default='')
     price = models.FloatField()
     weight = models.FloatField()
+    is_featured = models.BooleanField(default=False)
     date = models.DateField(default=date.today)
 
 
