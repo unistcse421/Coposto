@@ -1,0 +1,577 @@
+/* For loading... */
+
+html, body {
+    width  : 100%;
+    height : 100%;
+}
+#overlay-back {
+    position   : fixed;
+    top        : 0;
+    left       : 0;
+    width      : 100%;
+    height     : 100%;
+    background : #000;
+    opacity    : 0.6;
+    filter     : alpha(opacity=60);
+    z-index    : 5;
+    display    : none;
+}
+
+#overlay {
+    position : absolute;
+    top: 50%;
+    left: 50%;
+    width: 30em;
+    height: 18em;
+    margin-left: -7em; /*set to a negative number 1/2 of your width*/
+    z-index  : 10;
+    display  : none;
+}
+
+/* Blocks */
+
+.bottom_area {
+	background-color: #edefed;
+}
+
+.header .search {
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.45);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+    display: block;
+    /* vertical-align: bottom; */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.header form .col-md-3, .header form .col-md-2 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.search .container {
+    padding-top: 15px;
+    display: block;
+    vertical-align: middle;
+}
+
+.search input {
+    border: 0.8px solid #000000;
+}
+
+.search .twitter-typeahead {
+	display: inherit !important;
+}
+
+#top .btn-primary {
+    background-color: rgb(255, 30, 153);
+    border-color: #FF1E99;
+    btn-size: x-large;
+}
+.search button {
+    width: 100%;
+    padding: 6.2px 5px;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+
+.search input {
+	font-size: larger;
+}
+
+#top h1 {
+	color: white;
+}
+
+#top .text-vertical-center h3 {
+    margin-top: 5px;
+    color: rgb(78, 76, 76);
+}
+
+#top .text-vertical-center .container {
+	height: 10px;
+}
+
+.text-vertical-center img {
+	display: initial !important;
+	/*max-height: 225px !important;*/
+    width: 20%;
+    height: auto;
+}
+
+.text-vertical-center div {
+
+}
+
+.search .img-rounded {
+    margin-left: -0.6px;
+}
+
+#top .text-vertical-center .btn, .about #send_form .btn {
+    padding: 7px 20px;
+}
+
+.search .input-group-addon {
+    border-right-width: 0;
+    border-radius: 0;
+}
+
+#top .btn, .about .btn {
+    background-color: #ff5a5f;
+    border-color: #ff5a5f;
+    border-radius: 3px;
+    border: 1px solid #ff5a5f;
+}
+
+.search .twitter-typeahead {
+	position: inherit !important;
+}
+.search .tt-menu {
+	background: rgb(255, 255, 255);
+    border: 1px solid rgba(197, 197, 197, 0.67);
+    margin-top: -15px;
+    border-top: 0;
+}
+
+.search .from .tt-menu {
+	width: 266%;
+}
+
+.search .to .tt-menu {
+	width: 166%;
+}
+.search .tt-suggestion {
+    border-bottom: 1px solid #EAEAEA;
+    line-height: 180%;
+    padding-left: 9px;
+}
+
+.search .tt-suggestion:hover, .search .tt-suggestion.tt-cursor {
+	background: rgb(255, 90, 95);
+}
+
+/* Modal for signin/singup/help */
+
+#mainModal .modal-body {
+    overflow: hidden;
+}
+
+#registration_form .alternative-hint, #login_form .alternative-hint {
+    padding: 0px 0px 20px 15px;
+}
+
+#registration_form .alternative-hint a, #login_form .alternative-hint a {
+    padding-left: 5px;
+    vertical-align: top;
+}
+
+#fail_text {
+    display: none;
+}
+
+/* Bottom area styles */
+
+.about {
+	padding-top: 0;
+}
+
+.about h2 {
+	font-size: 130%;
+}
+
+.about .send_area_div {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.send_area_div {
+	margin-top: 21px;
+}
+
+.date_b .input-group .form-control {
+	position: static !important;
+}
+
+.date_b .help-block {
+	margin-top: 4% !important;
+}
+
+.dest_b .help-block {
+	margin-top: 2% !important;
+}
+
+.send_area_div .form-control {
+	margin-bottom: 10px;
+}
+
+.send_area_div .form-group {
+	margin-bottom: 0;
+}
+
+.send_area_div .help-block {
+	position: absolute;
+    text-align: right;
+    right: 10px;
+    margin-top: -38px;
+}
+
+.send_area_div .help-block ul {
+	background: white;
+}
+
+.image .error_div .with-errors {
+    color: #a94442;
+}
+
+.image .help-block {
+	top: -4px;
+    font-size: smaller;
+    color: #A94442;
+    position: absolute;
+    right: 10px;
+    background: white;
+}
+
+.about .error_div {
+	border: 1px solid #A94442 !important;
+}
+
+.send_area_div input, .send_area_div textarea {
+	border-radius: 0;
+	font-size: larger;
+	height: 40px;
+}
+
+.send_area_div textarea {
+	height: 80px !important;
+}
+
+.send_area_div input[name=destination_a], .send_area_div input[name=date_a]  {
+	float: left;
+	width: 50%;
+	border-right: 0;
+}
+
+.send_area_div input[name=destination_b], .send_area_div input[name=date_b] {
+	border-left: 0;
+	width: 50%;
+}
+
+.send_area_div input[name=date_a] {
+	float: left;
+	width: 100%;
+}
+
+.send_area_div input[name=date_a], .send_area_div input[name=date_b] {
+	width: 100%;
+}
+
+.send_area_div .date_a {
+	float: left;
+}
+
+.send_area_div .input-group {
+	float: left;
+}
+
+.send_area_div .input-group input {
+	line-height: 20px;
+}
+
+.send_area_div .input-group-addon {
+	line-height: 26px;
+	border-radius: 0;
+	width: 16.67%;
+}
+
+.send_area_div .col-md-6, .send_area_div .col-md-12 {
+	padding: 0 !important;
+}
+
+.send_area_div .col-md-6 {
+	/*padding-bottom: 10px !important;*/
+}
+
+.send_area_div .col-md-12 .input-group {
+	width: 100%;
+}
+
+
+.send_area_div .fieldWrapper {
+	margin-top: 10px;
+}
+
+#prefetch2 input {
+	width: 100%;
+}
+
+#prefetch2 .twitter-typeahead {
+	position: inherit !important;
+	display: inherit !important;
+}
+
+#prefetch2 .tt-menu {
+	text-align: left;
+}
+
+#prefetch2 .tt-menu {
+	background: rgb(255, 255, 255);
+    border: 1px solid rgba(197, 197, 197, 0.67);
+    /*margin-top: -15px;*/
+    border-top: 0;
+}
+
+.dest_a .tt-menu {
+	width: 100%;
+	margin-top: 35px;
+}
+
+.dest_b .tt-menu {
+	width: 100%;
+}
+
+#prefetch2 .tt-suggestion {
+    border-bottom: 1px solid #EAEAEA;
+    line-height: 180%;
+    padding-left: 9px;
+}
+
+#prefetch2 pre {
+	margin-bottom: 0px;
+}
+
+.date_a, .date_b {
+	margin-top: 0px !important;
+}
+
+#prefetch2 .tt-suggestion:hover, #prefetch2 .tt-suggestion.tt-cursor {
+	background: rgb(255, 90, 95);
+}
+
+.send_area_div input[name='image'] {
+
+    display: none;
+}
+
+.about .image {
+    border: 1px solid #CCCCCD;
+    font-size: larger;
+    line-height: 40px;
+    margin-bottom: 10px;
+    background-color: white;
+    color: #999999;
+    text-align: left;
+    cursor: pointer;
+    float: left;
+    padding-left: 0;
+    padding-right: 0;
+    max-height: 43px;
+    overflow: hidden;
+}
+
+.about .image #button {
+	vertical-align: middle;
+    margin-left: 10px;
+}
+
+.about .image #val {
+	vertical-align: middle;
+	color: black;
+}
+
+.about .button {
+	padding-left: 0;
+    padding-right: 0;
+    padding-top: 1px;
+}
+
+.about #send_form .btn {
+	width: 100%;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    height: 43px;
+}
+
+.about .sliding_section {
+	display: none;
+}
+
+.about .parcel_list .item {
+    margin: auto;
+}
+
+.about .parcel_list img {
+    max-width: 400px;
+    margin: auto;
+}
+
+.about .parcel_list .carousel-control {
+    background: none !important;
+    color: #FF5A5F;
+}
+
+.about .parcel_list h3 {
+    margin: 35px 0;
+}
+
+.about hr {
+    display: none;
+    border-top-color: #FF5A5F
+}
+
+.about .sliding_section .close_button i {
+    font-size: 30px;
+    color: #777;
+    position: absolute;
+    right: 72px;
+    top: 20px;
+}
+
+.overlay {
+    opacity: 0.4;
+}
+
+.search input {
+	border-radius: 0px;
+	height: 38px;
+}
+
+#timer {
+	top: 50%;
+    left: 50%;
+    /*width: 700px;*/
+    height: 100px;
+    margin-top: 80px;
+    margin-left: -460px;
+}
+
+#send_form #success_text {
+    position: fixed;
+}
+
+/* Common */
+
+#success_text {
+    display: none;
+}
+
+/* Reg and login forms */
+
+
+/* Bring_form results */
+
+.bring_total_box {
+    margin: 10px 0px 10px 0;
+    display: none;
+}
+
+.bring_total_box .submit_button {
+    padding-right: 0px;
+}
+
+#bring_form_result #success_text {
+	display: none;
+}
+
+/* Bring no result */
+
+.bring_no_result {
+    font-size: 16px;
+}
+
+/* USER PROFILE PAGE */
+ .card {
+    margin-top: 20px;
+    padding: 30px;
+    background-color: rgba(214, 224, 226, 0.2);
+    -webkit-border-top-left-radius:5px;
+    -moz-border-top-left-radius:5px;
+    border-top-left-radius:5px;
+    -webkit-border-top-right-radius:5px;
+    -moz-border-top-right-radius:5px;
+    border-top-right-radius:5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.card.hovercard {
+    position: relative;
+    padding-top: 0;
+    overflow: hidden;
+    text-align: center;
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, 1);
+}
+.card.hovercard .card-background {
+    height: 130px;
+}
+.card-background img {
+    -webkit-filter: blur(25px);
+    -moz-filter: blur(25px);
+    -o-filter: blur(25px);
+    -ms-filter: blur(25px);
+    filter: blur(25px);
+    margin-left: -100px;
+    margin-top: -200px;
+    min-width: 130%;
+}
+.card.hovercard .useravatar {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+}
+.card.hovercard .useravatar img {
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.5);
+}
+.card.hovercard .card-info {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+}
+.card.hovercard .card-info .card-title {
+    padding:0 5px;
+    font-size: 20px;
+    line-height: 1;
+    color: #262626;
+    background-color: rgba(255, 255, 255, 0.1);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.card.hovercard .card-info {
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 20px;
+    color: #737373;
+    text-overflow: ellipsis;
+}
+.card.hovercard .bottom {
+    padding: 0 20px;
+    margin-bottom: 17px;
+}
+.btn-pref .btn {
+    -webkit-border-radius:0 !important;
+}
+
+.btn-pref .btn:hover {
+	border: solid 1px white;
+	color: white;
+}
+
+.btn-pref .btn:focus {
+	outline: none;
+	border: solid 1px white;
+}
+
+

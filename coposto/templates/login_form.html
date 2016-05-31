@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="exampleModalLabel">{{ login }}</h4>
+</div>
+<form id="login_form" role="form" method="post" action="#" data-toggle="validator">{% csrf_token %}
+	<div class="modal-body">
+		<div class="form-group">
+			<input type="email" required name="email" id="email" class="form-control input-lg" placeholder="{{ email }}" tabindex="4">
+			<div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group">
+			<input type="password" required name="password" id="password" class="form-control input-lg" placeholder="{{ password }}" tabindex="4">
+			<div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group row">
+	        <label class="col-md-3 control-label"><a href="#">{{ forgot_password }}</a></label>
+	    </div>
+	    <div id="fail_text" class="alert alert-danger">
+	    	{{ fail_text_login_form | safe }}
+    	</div>
+		<div id="success_text" class="alert alert-success">
+			{{ success_text_login_form | safe }}
+		</div>
+	</div>
+	<div class="modal-footer">
+	    <button type="button" class="btn btn-default" data-dismiss="modal">{{ cancel }}</button>
+	    <button type="submit" class="btn btn-primary">{{ login }}</button>
+    </div>
+    <hr>
+	<div class="alternative-hint">
+		{{ IF_NOT_REGISTERED_TEXT }} <a id="register_btn" href>{{ signup }}</a>
+	</div>
+</form>
+<script>
+$(document).ready(function() {
+	$('#register_btn').on('click', function(e) {
+		$('#signinModal').modal('hide');
+		$('#signupModal').modal('show');
+		return false;
+	});
+});
+</script>

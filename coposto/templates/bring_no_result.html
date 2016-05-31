@@ -1,0 +1,21 @@
+<div class="row bring_no_result">
+    <h2>{{ no_records }}</h2>
+    <p>
+        {{ wanna_get_notice_bring }}
+    </p>
+    <div>
+        <button type="submit" id="yes_button" class="btn btn-primary">{{ yes }}!</button>
+    </div>
+</div>
+<script type="text/javascript">
+$('#yes_button').on('click', function(e) {
+    var is_logged = '{{ is_logged }}';
+    console.log('Is_logged: ' + is_logged);
+    if (is_logged == 'False') {
+        $('#mainModal').modal('show');
+    }
+    else {
+        alert('Успешно добавлен!')
+    }
+})
+</script>
