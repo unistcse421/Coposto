@@ -1,3 +1,0 @@
-Please, confirm: {{ site }}
-{{ expiration_days }}
-{{ activation_key }}
