@@ -1,0 +1,78 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="exampleModalLabel">{{ signup_title }}</h4>
+</div>
+<form id="registration_form" role="form" method="post" action="#" data-toggle="validator">{% csrf_token %}
+	<div class="modal-body">
+        <div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-6">
+				<div class="form-group">
+                    <input type="text" required name="first_name" id="first_name" class="form-control input-lg" placeholder="{{ first_name }}" tabindex="1">
+                    <div class="help-block with-errors"></div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-6">
+				<div class="form-group">
+					<input type="text" required name="last_name" id="last_name" class="form-control input-lg" placeholder="{{ last_name }}" tabindex="2">
+					<div class="help-block with-errors"></div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<input type="email" required data-remote="reg_form_validator" name="email" id="email" class="form-control input-lg" placeholder="{{ email }}" tabindex="4">
+			<div class="help-block with-errors"></div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-6">
+				<div class="form-group">
+					<input type="password" required data-minlength="5" name="password" id="password" class="form-control input-lg" placeholder="{{ password }}" tabindex="5">
+					<div class="help-block with-errors"></div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-6">
+				<div class="form-group">
+					<input type="password" required data-minlength="5" data-match="#password" name="password_confirmation" id="password_confirmation" class="form-control input-lg" placeholder="{{ password_confirmation }}" tabindex="6">
+					<div class="help-block with-errors"></div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group row">
+	        <label class="col-md-3 control-label">{{ profile_picture }}</label>
+	        <div class="col-md-9">
+		        <input id="avatar" name="avatar" type="file">
+	        </div>
+	    </div>
+		<div class="form-group row">
+	        <label class="col-md-3 control-label">{{ terms_of_use }}</label>
+	        <div class="col-md-9">
+	            <div style="border: 1px solid #e5e5e5; height: 120px; overflow: auto; padding: 10px;">
+	                {% include "terms.txt" %}
+	            </div>
+	        </div>
+	    </div>
+
+	    <div class="form-group row" style="margin-bottom: 0;">
+	        <div class="col-xs-6 col-xs-offset-3">
+	            <div class="checkbox">
+	                <label>
+	                    <input required type="checkbox" name="agree" value="agree" /> {{ agree_text }}
+	                </label>
+	            </div>
+	        </div>
+	    </div>
+	    <div id="success_text" class="alert alert-success">
+	    	{{ success_text_reg_form | safe }}
+		</div>
+	<div class="modal-footer">
+	    <button type="button" class="btn btn-default" data-dismiss="modal">{{ cancel }}</button>
+	    <button type="submit" class="btn btn-primary">{{ register }}</button>
+    </div>
+    </form>
+</div>
+
+<script>
+// var btnCust = '<button type="button" class="btn btn-default" title="Add picture tags" ' +
+//     'onclick="alert(\'Call your custom code here.\')">' +
+//     '<i class="glyphicon glyphicon-tag"></i>' +
+//     '</button>';
+</script>

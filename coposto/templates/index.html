@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>COPOSTO</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="static/css/stylish-portfolio.css" rel="stylesheet">
+    <link href="static/css/style.css" rel="stylesheet">
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/bs/dt-1.10.10,r-2.0.0,se-1.1.0/datatables.js">
+    <link href="static/css/datepicker.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- jQuery -->
+    <script src="static/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/js/bootstrap.min.js"></script>
+
+    <!-- Validator script -->
+    <script src="static/js/validator.js" type="text/javascript"></script>
+
+    <!-- DataTable script -->
+    <script type="text/javascript" src="https://cdn.datatables.net/s/bs/dt-1.10.10,r-2.0.0/datatables.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="top" class="header">
+        <!-- Navigation -->
+        <nav>
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="#" id="help_button">
+                        {{ help }}
+                    </a>
+                </li>
+                <li>
+                    {% if request.session.is_logged %}
+                        <a href="#" id="account_button">{{ request.session.logged_name }}</a>
+                    {% else %}
+                        <a href="#" data-toggle="modal" id="signup_button" data-target="#mainModal" data-whatever="signup">{{ signup }}</a>
+                    {% endif %}
+                </li>
+                <li>
+                    {% if request.session.is_logged %}
+                        <a href="#" id="logout_button">{{ logout }}</a>
+                    {% else %}
+                        <a href="#" data-toggle="modal" id="signin_button" data-target="#mainModal" data-whatever="signin">{{ login }}</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+        <div class="text-vertical-center">
+            <!-- <h1>COPOSTO</h1> -->
+            <a href="http://coposto.com/">
+                <div>
+                    <img class="img-responsive" src="static/img/logo.png"/>
+                </div>
+            </a>
+            <h3>{{ description }}</h3>
+            <br>
+            <a href="#send_form" id="send_form_button" class="btn btn-primary btn-lg">{{ send_text }}</a>
+        </div>
+        <div class="search" id="send_form">
+	        <div class="container">
+	          	<div class="row">
+	            	<div class="col-md-10 col-md-offset-1">
+	              		<div class="form-section">
+	                		<div class="row">
+	                    		<form id="bring_form" role="form">{% csrf_token %}
+	                      			<div class="col-md-3 col-md-offset-1">
+	                        			<div class="form-group from" id="prefetch">
+	                          				<!-- <label class="sr-only" for="location">Location</label> -->
+	                          				<input required name="from" type="text" class="form-control typeahead" id="location" placeholder="{{ from_dest }}">
+                                            <div class="help-block with-errors"></div>
+	                       				</div>
+	                      			</div>
+	                      			<div class="col-md-3">
+	                        			<div class="form-group to" id="prefetch">
+	                          				<!-- <label class="sr-only" for="location">Location</label> -->
+	                          				<input required name="to" type="text" class="form-control typeahead" id="location" placeholder="{{ to_dest }}">
+                                            <div class="help-block with-errors"></div>
+	                       				</div>
+	                      			</div>
+	                      			<div class="col-md-2">
+	                        			<div class="form-group">
+	                          				<!-- <label class="sr-only" for="checkin">From</label> -->
+	                          				<div class="input-group">
+	                            				<input required name="date" type="text" class="form-control" id="date" placeholder="{{ date }}">
+	                            				<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                                <div class="help-block with-errors"></div>
+	                          				</div>
+	                        			</div>
+	                      			</div>
+	                      			<div class="col-md-2 img-rounded">
+	                        			<button type="submit" class="btn btn-lg btn-default btn-primary">
+	                        				{{ bring_text }}
+	                        			</button>
+	                      			</div>
+			                    </form>
+			                </div>
+	              		</div>
+	            	</div>
+	          	</div>
+	        </div>
+		</div>
+    </header>
+
+    <!-- Modals -->
+    <div class="modal fade" id="mainModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+    <div class='bottom_area'>
+        <!-- Sending form -->
+        <section id="about" class="about">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class = "sliding_section row">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container -->
+        </section>
+
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 col-lg-offset-1 text-center">
+                        <h4><strong>COPOSTO</strong>
+                        </h4>
+                        <p>50 UNIST-gil<br>Ульсан, Южная Kорея</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-phone fa-fw"></i> (82) 10 3555-4651</li>
+                            <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="info@coposto.com">info@coposto.com</a>
+                            </li>
+                        </ul>
+                        <br>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="https://www.facebook.com/coposto/"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-dribbble fa-fw fa-3x"></i></a>
+                            </li>
+                        </ul>
+                        <hr class="small">
+                        <p class="text-muted">Copyright &copy; COPOSTO 2016</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+	<!-- DatePicker -->
+    <script src="static/js/bootstrap-datepicker.js"></script>
+
+    <!-- Typeahead -->
+    <script src="static/js/typeahead.bundle.js"></script>
+
+    <!-- Image upload [dropzone] -->
+    <script src="static/js/dropzone.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script>
+    $(document).ready(function() {
+
+    // Scrolls to the selected menu item on the page
+    $(function() {
+        $('a[href*=#]:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html,body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+    });
+
+    // Help / SignUp / SignIn forms
+
+    $('#mainModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var section = button.data('whatever') // Extract info from data-* attributes
+
+        var modal = $(this);
+        var url = (section == "signin" ? "/accounts/login/" : "/accounts/register/");
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            success : function(data) {
+                // console.log(data);
+                $('.modal-content').html(data);
+            }
+        });
+    });
+
+    $(document).one('click', '#registration_form', function(e) {
+        $('#registration_form').validator();
+        console.log('validator activated');
+    });
+
+    $(document).on('submit', '#registration_form', function(e) {
+        if (e.isDefaultPrevented()) {
+            console.log('form has problems');
+        } else {
+            if ($('#registration_form').attr('novalidate') == 'true') {
+                console.log('form is fully valid');
+                var form = document.forms.namedItem("registration_form");
+                var formData = new FormData(form);
+
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                var req = new XMLHttpRequest(), responseText;
+                req.open("POST", "/accounts/reg_result/")
+                req.send(formData);
+
+                req.onreadystatechange = function() {
+                    if (req.readyState == XMLHttpRequest.DONE) {
+                        responseText = req.responseText;
+                        if (responseText == 'exists') {
+                            $('#registration_form #success_text').hide();
+                        }
+                        else if (responseText == 'success') {
+                            $('#registration_form #success_text').show();
+                            setTimeout(function() {
+                                $('#registration_form #success_text').hide();
+                                location.reload();
+                            }, 3000);
+
+                        }
+
+                    }
+                }
+                return false;
+            }
+        }
+    });
+
+    $(document).one('click', '#login_form', function(e) {
+        $('#login_form').validator();
+        console.log('validator activated');
+    });
+
+    $(document).on('submit', '#login_form', function (e) {
+        if (e.isDefaultPrevented()) {
+            console.log('form has problems');
+        } else {
+            if ($('#login_form').attr('novalidate') == 'true') {
+                console.log('form is fully valid');
+                var form = document.forms.namedItem("login_form");
+                var formData = new FormData(form);
+
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                var req = new XMLHttpRequest(), responseText;
+                req.open("POST", "/accounts/login_result/")
+                req.send(formData);
+
+                req.onreadystatechange = function() {
+                    if (req.readyState == XMLHttpRequest.DONE) {
+                        responseText = req.responseText;
+                        var fail_text = $('#login_form #fail_text');
+                        var success_text = $('#login_form #success_text');
+                        if (responseText == 'fail') {
+                            success_text.hide();
+                            fail_text.show();
+                        }
+                        else if (responseText == 'success') {
+                            fail_text.hide();
+                            success_text.show();
+                            setTimeout(function() {
+                                success_text.hide();
+                                location.reload();
+                            }, 3000);
+
+                        }
+
+                    }
+                }
+                return false;
+            }
+        }
+    });
+
+    $(document).on('click', '#account_button', function() {
+        $.get('accounts/account_view/', function(data) {
+            $('.sliding_section').html(data);
+            $('.sliding_section').slideDown();
+        });
+
+    });
+
+    $(document).on('submit', '#bring_form', function (e) {
+        if (e.isDefaultPrevented()) {
+            console.log('form has problems');
+        } else {
+            if ($('#bring_form').attr('novalidate') == 'true' || 1) {
+                console.log('bring_form');
+                var form = document.forms.namedItem("bring_form");
+                var formData = new FormData(form);
+
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                var req = new XMLHttpRequest(), responseText;
+                req.open("POST", "bring_result/")
+                req.send(formData);
+
+                req.onreadystatechange = function() {
+                    if (req.readyState == XMLHttpRequest.DONE) {
+                        var responseText = JSON.parse(req.responseText);
+                        var result_text = responseText.result_text;
+
+                        if (result_text == 'fail') {
+
+                        }
+                        else if (result_text == 'success') {
+                            $('.sliding_section').html(responseText.html);
+                            $('.sliding_section').slideDown();
+
+
+                            // setTimeout(function() {
+                            //     location.reload();
+                            // }, 3000);
+
+                        }
+
+                    }
+                }
+                return false;
+            }
+        }
+    });
+
+    // Bring form date picker
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+    var checkin = $('#date').datepicker({
+    onRender: function(date) {
+        return date.valueOf() < now.valueOf() ? 'disabled' : '';
+    }
+    }).on('changeDate', function(ev) {
+        checkin.hide();
+    }).data('datepicker');
+
+
+    // Instantiate the Bloodhound suggestion engine
+    var cities = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        // prefetch: '../data/films/post_1960.json',
+        remote: {
+            url: '/city/?q=%QUERY',
+            filter: function(x) {
+                return $.map(x, function(item) {
+                    return {value: item};
+                });
+            },
+            wildcard: '%QUERY'
+        }
+    });
+
+    // Initialize the Bloodhound suggestion engine
+    cities.initialize();
+
+	$('#prefetch .typeahead').typeahead(
+        {
+          minLength: 2,
+          highlight: true
+        },{
+        name: 'cities',
+        display: 'value',
+        source: cities.ttAdapter(),
+        minLength: 2, // send AJAX request only after user type in at least 3 characters
+        limit: 5 // limit to show only 10 results
+    });
+
+    function errorize_send_form(error_txt) {
+        $('#send_button').addClass('disabled');
+        $('.image').addClass('error_div');
+        $('.image .help-block').addClass('with-errors');
+        $('.image .help-block').html(error_txt);
+        console.log($('.image .help-block').html());
+    }
+
+    function anti_errorize_send_form() {
+        $('#send_button').removeClass('disabled');
+        $('.image').removeClass('error_div');
+        $('.image .help-block').removeClass('with-errors');
+        $('.image .help-block').text('');
+        console.log('anti_errorize_send_form');
+    }
+
+    function picture_validation_send_form(obj) {
+        var fileName = obj.val();
+        if (!fileName) {
+            // errorize_send_form('Please attach a picture');
+            if ($('#button').html().slice(-1) == ':')
+                $('#button').text($('#button').html().slice(0, -1));
+            console.log('Picture is valid');
+            return true;
+        }
+        else {
+            var ext = fileName.split('.').pop().toLowerCase();
+            // var fileSize = (obj.files.length && obj.files[0].size) || '';
+            // console.log($("#send_form input[type='file']")[0].files[0].size);
+            if ($('#button').html().slice(-1) != ':')
+                $('#button').text($('#button').html() + ":");
+            if ($.inArray(ext, ['gif','png','jpg','jpeg']) == -1) {
+                errorize_send_form('Please attach only gif/png/jpg/jpeg');
+            }
+            else if (obj[0].files[0].size > 20*1024*1024) {
+                errorize_send_form('Picture size must be less than 3 MB');
+            }
+            else {
+                anti_errorize_send_form();
+                console.log('Picture is valid');
+                return true;
+            }
+        }
+        return false;
+    }
+
+    $(document).on("submit", 'form#send_form', function(event) {
+        var isPictureOk = picture_validation_send_form($("#send_form input[type='file']"))
+        if (event.isDefaultPrevented(event)) {
+            console.log('Form has problems');
+        } else {
+            if (isPictureOk) {
+                var form = document.forms.namedItem("send_form");
+                var formData = new FormData(form);
+
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                var req = new XMLHttpRequest(), responseText;
+                req.open("POST", "send_result/")
+                req.send(formData);
+                console.log('send_form')
+                req.onreadystatechange = function() {
+                    if (req.readyState == XMLHttpRequest.DONE) {
+                        responseText = req.responseText;
+
+                        if (responseText == 'fail') {
+
+                        }
+                        else if (responseText == 'success') {
+                            $('#send_form #success_text').show();
+                            setTimeout(function() {
+                                location.reload();
+                            }, 3000);
+
+                        }
+                        else if (responseText == 'not_logged') {
+                            $('#mainModal').modal('show');
+                        }
+
+                    }
+                }
+            }
+            return false;
+        }
+    });
+
+    $(document).on('click','.image', function () {
+        $("input[type='file']").trigger('click');
+    });
+
+    $(document).on('change', "#send_form input[type='file']", function () {
+        $('#val').text(this.value.replace(/C:\\fakepath\\/i, ''));
+        var obj = $("#send_form input[type='file']");
+        picture_validation_send_form(obj);
+    })
+
+    $('#send_form_button').click(function() {
+        var clicks = $(this).data('clicks');
+        $.ajax({
+            type: "GET",
+            url: "/send_form_view",
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            success : function(data) {
+                $('.sliding_section').html(data);
+                var is_logged = "{{ request.session.is_logged }}"
+                // if (is_logged != true && !clicks) {
+                //     $('#mainModal').modal('show');
+                //     $('#mainModal').on('hidden.bs.modal', function () {
+                //         $('#registration_form').validator('destroy');
+                //     })
+                // }
+
+                $("#checkin").on('input', function (e) {
+                    console.log($(this).val());
+                });
+
+                var divOut = $('<div />').addClass('col-md-12');
+                var divOut2 = $('<div />').addClass('col-md-2');
+                var div = $('<div />').addClass('input-group');
+                div = div.wrap(divOut).parent();
+                var span = $('<span />').addClass('input-group-addon date_a');
+                span.attr('id', 'checkin');
+                // span = span.wrap(divOut2).parent();
+                var i = $('<i />').addClass('glyphicon glyphicon-calendar');
+                span.append(i);
+                var span2 = $('<span />').addClass('input-group-addon');
+                span2.attr('id', 'checkin');
+                var i2 = $('<i />').addClass('glyphicon glyphicon-calendar');
+                // span2 = span2.wrap(divOut2).parent();
+                span2.append(i2);
+                var date_a = $('input[name="date_a"]');
+                var date_b = $('input[name="date_b"]');
+                // date_a.after(span);
+                // date_b.after(span2);
+                date_a.wrap(div);
+                date_b.wrap(div);
+                date_a.attr('id', 'checkin');
+                date_b.attr('id', 'checkout');
+
+                $('input[name="weight"]').attr('type', 'number');
+                $('input[name="price"]').attr('type', 'number');
+                $('input[name="price"]').attr('step', '0.01');
+                $('input[name="weight"]').attr('step', '0.01');
+
+                $('form#send_form :input').each(function(e) {
+                    $(this).attr('data-delay', '2000');
+                // $(this).blur(function()
+                //     {
+                //         if( $(this).val().length === 0 ) {
+                //             $(this).parents('p').addClass('warning');
+                //         }
+                //     });
+                });
+
+                var destination_a = $('input[name="destination_a"]');
+                var destination_b = $('input[name="destination_b"]');
+                divOut = $('<div />').attr('id', 'prefetch2');
+                divOut.addClass('col-md-6');
+                destination_a.addClass('typeahead');
+                destination_b.addClass('typeahead');
+                destination_a = destination_a.wrap(divOut).parent();
+                destination_b = destination_b.wrap(divOut).parent();
+
+                $('#prefetch2 .typeahead').typeahead(
+                    {
+                      minLength: 2,
+                      highlight: true
+                    },{
+                    name: 'cities',
+                    display: 'value',
+                    source: cities.ttAdapter(),
+                    minLength: 2, // send AJAX request only after user type in at least 3 characters
+                    limit: 5 // limit to show only 10 results
+                });
+
+                var nowTemp = new Date();
+                var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                var checkin = $('#checkin').datepicker({
+                onRender: function(date) {
+                    return date.valueOf() < now.valueOf() ? 'disabled' : '';
+                }
+              }).on('changeDate', function(ev) {
+                if (ev.date.valueOf() > checkout.date.valueOf()) {
+                  var newDate = new Date(ev.date)
+                  newDate.setDate(newDate.getDate() + 1);
+                  checkout.setValue(newDate);
+                }
+                // $('.date_a').removeClass('has-error');
+                // $('input[name="date_a"]').attr('required', 'false');
+                // console.log('checkin changed');
+                checkin.hide();
+                $('#checkout')[0].focus();
+              }).data('datepicker');
+              var checkout = $('#checkout').datepicker({
+                onRender: function(date) {
+                  return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+                }
+              }).on('changeDate', function(ev) {
+                // console.log('checkout changed');
+                // $('.date_b').removeClass('has-error');
+                // $('input[name="date_b"]').attr('required', 'false');
+                checkout.hide();
+              }).data('datepicker');
+            }
+
+        });
+        if (clicks) {
+            $('.sliding_section').slideUp();
+        } else {
+            $('.sliding_section').slideDown();
+            $('#send_form').submit(function(e) {
+                // e.preventDefault();
+                console.log('submitted');
+            });
+        }
+        $(this).data("clicks", !clicks);
+    });
+
+    $(document).on('click', ".btn-pref .btn", function () {
+        $(".btn-pref .btn").removeClass("btn-primary").addClass("btn-default");
+        // $(".tab").addClass("active"); // instead of this do the below
+        $(this).removeClass("btn-default").addClass("btn-primary");
+    });
+
+    $(document).on('click','#logout_button', function () {
+        $.ajax({
+            type: "GET",
+            url: "/accounts/logout/",
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            success : function(data) {
+                location.reload();
+            }
+        });
+    });
+
+});
+
+
+// Google Analytics
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-39983906-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+
+</html>
